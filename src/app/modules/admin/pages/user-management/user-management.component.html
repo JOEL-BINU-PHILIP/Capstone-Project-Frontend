@@ -1,0 +1,115 @@
+<div class="user-management-page">
+    <div class="page-header">
+        <h1>User Management</h1>
+
+        <div class="filters">
+            <select [(ngModel)]="roleFilter" (change)="applyFilters()">
+                <option value="">All Roles</option>
+                <option value="CUSTOMER">Customer</option>
+                <option value="TECHNICIAN">Technician</option>
+                <option value="SERVICE_MANAGER">Service Manager</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+            <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="locked">Locked</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading users...</p>
+    </div>
+
+    <div class="users-table-container" *ngIf="!loading && filteredUsers.length > 0">
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Roles</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of filteredUsers">
+                    <td><strong>{{ user.username }}</strong></td>
+                    <td>{{ user.firstName }} {{ user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phoneNumber }}</td>
+                    <td>
+                        <div class="roles-list">
+                            <span *ngFor="let role of user.roles" class="role-badge">
+                                {{ role }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge" [ngClass]="user.accountLocked ? 'status-locked' : 'status-active'">
+                            {{ user.accountLocked ? 'Locked' : 'Active' }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button *ngIf="!user.accountLocked" (click)="lockUser(user)" class="btn-action btn-lock"
+                                title="Lock User">
+                                🔒
+                            </button>
+                            <button *ngIf="user.accountLocked" (click)="unlockUser(user)" class="btn-action btn-unlock"
+                                title="Unlock User">
+                                🔓
+                            </button>
+                            <button (click)="openRoleDialog(user)" class="btn-action btn-role" title="Manage Roles">
+                                👤
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div *ngIf="!loading && filteredUsers.length === 0" class="empty-state">
+        <p>No users found</p>
+    </div>
+
+    <!-- Role Management Dialog -->
+    <div class="modal-overlay" *ngIf="showRoleDialog" (click)="closeRoleDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>Manage Roles</h2>
+            <p *ngIf="selectedUser">{{ selectedUser.username }} - {{ selectedUser.email }}</p>
+
+            <div class="current-roles">
+                <label>Current Roles:</label>
+                <div class="roles-display">
+                    <span *ngFor="let role of selectedUser?.roles" class="role-badge">
+                        {{ role }}
+                        <button (click)="removeRole(role)" class="remove-role">×</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="add-role">
+                <label>Add Role:</label>
+                <select [(ngModel)]="newRole">
+                    <option value="">-- Select a role --</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="TECHNICIAN">Technician</option>
+                    <option value="SERVICE_MANAGER">Service Manager</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+                <button (click)="addRole()" class="btn-add-role" [disabled]="!newRole || hasRole(newRole)">
+                    Add
+                </button>
+            </div>
+
+            <div class="modal-actions">
+                <button (click)="closeRoleDialog()" class="btn btn-close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

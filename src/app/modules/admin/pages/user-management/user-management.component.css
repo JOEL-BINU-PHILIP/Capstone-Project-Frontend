@@ -1,0 +1,277 @@
+.user-management-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+h1 {
+    font-size: 32px;
+    color: #1f2937;
+}
+
+.filters {
+    display: flex;
+    gap: 12px;
+}
+
+select {
+    padding: 10px 16px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+    background: white;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.users-table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.users-table thead {
+    background: #f9fafb;
+}
+
+.users-table th {
+    padding: 16px;
+    text-align: left;
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.users-table td {
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #1f2937;
+}
+
+.users-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.roles-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.role-badge {
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    position: relative;
+}
+
+.remove-role {
+    margin-left: 6px;
+    background: none;
+    border: none;
+    color: #991b1b;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-locked {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-action {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 16px;
+}
+
+.btn-lock {
+    background: #fee2e2;
+}
+
+.btn-lock:hover {
+    background: #fecaca;
+}
+
+.btn-unlock {
+    background: #d1fae5;
+}
+
+.btn-unlock:hover {
+    background: #a7f3d0;
+}
+
+.btn-role {
+    background: #dbeafe;
+}
+
+.btn-role:hover {
+    background: #bfdbfe;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal h2 {
+    font-size: 20px;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.modal p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+.current-roles,
+.add-role {
+    margin-bottom: 20px;
+}
+
+.current-roles label,
+.add-role label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+}
+
+.roles-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 40px;
+    padding: 12px;
+    background: #f9fafb;
+    border-radius: 8px;
+}
+
+.add-role {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.add-role label {
+    flex: 0 0 auto;
+}
+
+.add-role select {
+    flex: 1;
+}
+
+.btn-add-role {
+    padding: 10px 20px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-add-role:hover {
+    background: #2563eb;
+}
+
+.btn-add-role:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-close {
+    background: #e5e7eb;
+    color: #1f2937;
+}
+
+.btn-close:hover {
+    background: #d1d5db;
+}
