@@ -1,0 +1,145 @@
+<div class="register-container">
+    <div class="register-card">
+        <div class="register-header">
+            <h1>Create Customer Account</h1>
+            <p>Join our home service platform</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" formControlName="username" class="form-control"
+                    [class.error]="hasError('username', 'required') || hasError('username', 'pattern')"
+                    placeholder="Choose a username" />
+                @if (hasError('username', 'required')) {
+                <span class="error-message">Username is required</span>
+                }
+                @if (hasError('username', 'pattern')) {
+                <span class="error-message">Username can only contain letters, numbers, and underscores</span>
+                }
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" formControlName="email" class="form-control"
+                    [class.error]="hasError('email', 'required') || hasError('email', 'email')"
+                    placeholder="your@email.com" />
+                @if (hasError('email', 'required')) {
+                <span class="error-message">Email is required</span>
+                }
+                @if (hasError('email', 'email')) {
+                <span class="error-message">Enter a valid email address</span>
+                }
+            </div>
+
+            <!-- Name Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control"
+                        placeholder="John" />
+                    @if (hasError('firstName', 'required')) {
+                    <span class="error-message">First name is required</span>
+                    }
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" formControlName="lastName" class="form-control"
+                        placeholder="Doe" />
+                    @if (hasError('lastName', 'required')) {
+                    <span class="error-message">Last name is required</span>
+                    }
+                </div>
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number *</label>
+                <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control"
+                    [class.error]="hasError('phoneNumber', 'pattern')" placeholder="9876543210" />
+                @if (hasError('phoneNumber', 'required')) {
+                <span class="error-message">Phone number is required</span>
+                }
+                @if (hasError('phoneNumber', 'pattern')) {
+                <span class="error-message">Enter a valid 10-digit phone number</span>
+                }
+            </div>
+
+            <!-- Address Fields -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" formControlName="city" class="form-control" placeholder="Mumbai" />
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" formControlName="state" class="form-control"
+                        placeholder="Maharashtra" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="zipCode">Zip Code *</label>
+                <input type="text" id="zipCode" formControlName="zipCode" class="form-control"
+                    [class.error]="hasError('zipCode', 'pattern')" placeholder="400001" />
+                @if (hasError('zipCode', 'pattern')) {
+                <span class="error-message">Enter a valid 6-digit zip code</span>
+                }
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <div class="password-input-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                        class="form-control" [class.error]="hasError('password', 'weakPassword')"
+                        placeholder="Create a strong password" />
+                    <button type="button" class="toggle-password" (click)="togglePasswordVisibility('password')">
+                        {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+                    </button>
+                </div>
+                @if (hasError('password', 'required')) {
+                <span class="error-message">Password is required</span>
+                }
+                @if (hasError('password', 'weakPassword')) {
+                <span class="error-message">Password must contain uppercase, lowercase, number, and special
+                    character</span>
+                }
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <div class="password-input-wrapper">
+                    <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword"
+                        formControlName="confirmPassword" class="form-control" placeholder="Confirm your password" />
+                    <button type="button" class="toggle-password" (click)="togglePasswordVisibility('confirmPassword')">
+                        {{ showConfirmPassword ? '👁️' : '👁️‍🗨️' }}
+                    </button>
+                </div>
+                @if (hasFormError('passwordMismatch')) {
+                <span class="error-message">Passwords do not match</span>
+                }
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                <span class="spinner"></span>
+                Creating Account...
+                } @else {
+                Create Account
+                }
+            </button>
+        </form>
+
+        <!-- Login Link -->
+        <div class="register-footer">
+            <p>Already have an account? <a routerLink="/auth/login" class="link">Sign In</a></p>
+        </div>
+    </div>
+</div>
