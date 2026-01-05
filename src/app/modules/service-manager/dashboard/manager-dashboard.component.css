@@ -1,0 +1,24 @@
+.dashboard {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.dashboard-content {
+    margin-top: 24px;
+}
+
+.btn-logout {
+    margin-top: 24px;
+    padding: 10px 24px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
