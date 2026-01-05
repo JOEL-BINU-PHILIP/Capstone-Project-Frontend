@@ -1,0 +1,154 @@
+<div class="catalog-management-page">
+    <h1>Service Catalog Management</h1>
+
+    <!-- Categories Section -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Categories</h2>
+            <button (click)="openCategoryDialog()" class="btn-primary">+ Add Category</button>
+        </div>
+
+        <div class="categories-grid">
+            <div *ngFor="let category of categories" class="category-card">
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description }}</p>
+                <div class="card-actions">
+                    <button (click)="editCategory(category)" class="btn-edit">Edit</button>
+                    <button (click)="deleteCategory(category)" class="btn-delete">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="section">
+        <div class="section-header">
+            <h2>Services</h2>
+            <button (click)="openServiceDialog()" class="btn-primary">+ Add Service</button>
+        </div>
+
+        <div class="services-table-container">
+            <table class="services-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Base Price</th>
+                        <th>Duration</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let service of services">
+                        <td>
+                            <strong>{{ service.name }}</strong>
+                            <div class="service-desc">{{ service.description }}</div>
+                        </td>
+                        <td>{{ service.categoryName }}</td>
+                        <td>₹{{ service.basePrice }}</td>
+                        <td>{{ service.estimatedDuration }} min</td>
+                        <td>
+                            <span class="status-badge" [ngClass]="service.active ? 'active' : 'inactive'">
+                                {{ service.active ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button (click)="editService(service)" class="btn-small">Edit</button>
+                                <button (click)="deleteService(service)" class="btn-small btn-danger">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Category Dialog -->
+    <div class="modal-overlay" *ngIf="showCategoryDialog" (click)="closeCategoryDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>{{ editingCategory ? 'Edit' : 'Add' }} Category</h2>
+
+            <div class="form-group">
+                <label>Name *</label>
+                <input type="text" [(ngModel)]="categoryForm.name" placeholder="Category name">
+            </div>
+
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea [(ngModel)]="categoryForm.description" rows="3" placeholder="Category description"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Image URL</label>
+                <input type="text" [(ngModel)]="categoryForm.imageUrl" placeholder="https://...">
+            </div>
+
+            <div class="modal-actions">
+                <button (click)="closeCategoryDialog()" class="btn btn-cancel">Cancel</button>
+                <button (click)="saveCategory()" class="btn btn-save">
+                    {{ editingCategory ? 'Update' : 'Create' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Dialog -->
+    <div class="modal-overlay" *ngIf="showServiceDialog" (click)="closeServiceDialog()">
+        <div class="modal large" (click)="$event.stopPropagation()">
+            <h2>{{ editingService ? 'Edit' : 'Add' }} Service</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Name *</label>
+                    <input type="text" [(ngModel)]="serviceForm.name" placeholder="Service name">
+                </div>
+
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select [(ngModel)]="serviceForm.categoryId">
+                        <option value="">Select category</option>
+                        <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Description *</label>
+                <textarea [(ngModel)]="serviceForm.description" rows="3" placeholder="Service description"></textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Base Price *</label>
+                    <input type="number" [(ngModel)]="serviceForm.basePrice" placeholder="0">
+                </div>
+
+                <div class="form-group">
+                    <label>Duration (minutes) *</label>
+                    <input type="number" [(ngModel)]="serviceForm.estimatedDuration" placeholder="60">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Image URL</label>
+                <input type="text" [(ngModel)]="serviceForm.imageUrl" placeholder="https://...">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" [(ngModel)]="serviceForm.active">
+                    Active
+                </label>
+            </div>
+
+            <div class="modal-actions">
+                <button (click)="closeServiceDialog()" class="btn btn-cancel">Cancel</button>
+                <button (click)="saveService()" class="btn btn-save">
+                    {{ editingService ? 'Update' : 'Create' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
