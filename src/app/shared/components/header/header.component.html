@@ -1,0 +1,55 @@
+<header class="header">
+    <div class="header-container">
+        <div class="logo" (click)="navigateHome()">
+            <span class="logo-icon">🏠</span>
+            <span class="logo-text">HomeService</span>
+        </div>
+
+        <nav class="nav" *ngIf="currentUser">
+            <!-- Customer Navigation -->
+            <ng-container *ngIf="hasRole(roles.CUSTOMER)">
+                <a routerLink="/customer/dashboard" routerLinkActive="active">Dashboard</a>
+                <a routerLink="/customer/services" routerLinkActive="active">Services</a>
+                <a routerLink="/customer/bookings" routerLinkActive="active">My Bookings</a>
+                <a routerLink="/customer/invoices" routerLinkActive="active">Invoices</a>
+            </ng-container>
+
+            <!-- Technician Navigation -->
+            <ng-container *ngIf="hasRole(roles.TECHNICIAN)">
+                <a routerLink="/technician/dashboard" routerLinkActive="active">Dashboard</a>
+                <a routerLink="/technician/bookings" routerLinkActive="active">Assigned Bookings</a>
+                <a routerLink="/technician/profile" routerLinkActive="active">Profile</a>
+            </ng-container>
+
+            <!-- Service Manager Navigation -->
+            <ng-container *ngIf="hasRole(roles.SERVICE_MANAGER)">
+                <a routerLink="/manager/dashboard" routerLinkActive="active">Dashboard</a>
+                <a routerLink="/manager/technicians/pending" routerLinkActive="active">Pending Approvals</a>
+                <a routerLink="/manager/technicians" routerLinkActive="active"
+                    [routerLinkActiveOptions]="{exact: true}">Technicians</a>
+                <a routerLink="/manager/bookings" routerLinkActive="active">Bookings</a>
+            </ng-container>
+
+            <!-- Admin Navigation -->
+            <ng-container *ngIf="hasRole(roles.ADMIN)">
+                <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+                <a routerLink="/admin/users" routerLinkActive="active">Users</a>
+                <a routerLink="/admin/services" routerLinkActive="active">Services</a>
+                <a routerLink="/admin/reports" routerLinkActive="active">Reports</a>
+            </ng-container>
+        </nav>
+
+        <div class="user-menu">
+            <ng-container *ngIf="currentUser; else loginButton">
+                <div class="user-info">
+                    <span class="user-name">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+                    <span class="user-role">{{ getRoleBadge() }}</span>
+                </div>
+                <button class="btn-logout" (click)="logout()">Logout</button>
+            </ng-container>
+            <ng-template #loginButton>
+                <a routerLink="/auth/login" class="btn-login">Login</a>
+            </ng-template>
+        </div>
+    </div>
+</header>
