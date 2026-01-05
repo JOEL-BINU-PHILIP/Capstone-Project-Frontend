@@ -1,0 +1,79 @@
+<div class="technicians-page">
+    <div class="page-header">
+        <h1>All Technicians</h1>
+
+        <div class="filters">
+            <select [(ngModel)]="availabilityFilter" (change)="applyFilters()">
+                <option value="">All Availability</option>
+                <option value="AVAILABLE">Available</option>
+                <option value="UNAVAILABLE">Unavailable</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading technicians...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredTechnicians.length === 0" class="empty-state">
+        <p>No technicians found</p>
+    </div>
+
+    <div class="technicians-table-container" *ngIf="!loading && filteredTechnicians.length > 0">
+        <table class="technicians-table">
+            <thead>
+                <tr>
+                    <th>Technician</th>
+                    <th>Contact</th>
+                    <th>Experience</th>
+                    <th>Skills</th>
+                    <th>Availability</th>
+                    <th>Completed Jobs</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tech of filteredTechnicians">
+                    <td>
+                        <div class="technician-info">
+                            <strong class="technician-name">{{ tech.firstName || '' }} {{ tech.lastName || ''
+                                }}</strong>
+                            <span class="technician-username" *ngIf="tech.username">&#64;{{ tech.username }}</span>
+                            <small class="technician-id">ID: {{ tech.userId || tech.id }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="contact-info">
+                            <div *ngIf="tech.email">📧 {{ tech.email }}</div>
+                            <div *ngIf="tech.phoneNumber">📱 {{ tech.phoneNumber }}</div>
+                            <div *ngIf="tech.city || tech.state">📍 {{ tech.city }}<span
+                                    *ngIf="tech.city && tech.state">, </span>{{ tech.state }}</div>
+                        </div>
+                    </td>
+                    <td>{{ tech.experienceYears || tech.experience || 0 }} years</td>
+                    <td>
+                        <div class="skills-list">
+                            <span *ngFor="let skill of tech.skills" class="skill-tag">
+                                {{ skill }}
+                            </span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="availability-badge"
+                            [ngClass]="tech.available === true ? 'available' : (tech.available === false ? 'unavailable' : (tech.availability?.toLowerCase() || 'unknown'))">
+                            {{ tech.available === true ? 'Available' : (tech.available === false ? 'Unavailable' :
+                            (tech.availability || 'Unknown')) }}
+                        </span>
+                    </td>
+                    <td>{{ tech.totalJobsCompleted ?? tech.completedJobs ?? 0 }}</td>
+                    <td>
+                        <span *ngIf="tech.averageRating">
+                            ⭐ {{ tech.averageRating | number:'1.1-1' }}
+                        </span>
+                        <span *ngIf="!tech.averageRating" class="no-rating">N/A</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
