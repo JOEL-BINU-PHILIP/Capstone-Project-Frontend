@@ -1,0 +1,8 @@
+<div class="dashboard">
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, {{ user?.firstName }} {{ user?.lastName }}!</p>
+    <div class="dashboard-content">
+        <p>Full system access - manage users, services, and view reports.</p>
+        <button (click)="logout()" class="btn-logout">Logout</button>
+    </div>
+</div>
