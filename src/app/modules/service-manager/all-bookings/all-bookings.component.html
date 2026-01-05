@@ -1,0 +1,74 @@
+<div class="all-bookings-page">
+    <div class="page-header">
+        <h1>All Bookings</h1>
+
+        <div class="filters">
+            <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+                <option value="">All Status</option>
+                <option value="PENDING">Pending</option>
+                <option value="ASSIGNED">Assigned</option>
+                <option value="CONFIRMED">Confirmed</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="COMPLETED">Completed</option>
+                <option value="CANCELLED">Cancelled</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading bookings...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredBookings.length === 0" class="empty-state">
+        <p>No bookings found</p>
+    </div>
+
+    <div class="bookings-table-container" *ngIf="!loading && filteredBookings.length > 0">
+        <table class="bookings-table">
+            <thead>
+                <tr>
+                    <th>Booking #</th>
+                    <th>Service</th>
+                    <th>Customer</th>
+                    <th>Technician</th>
+                    <th>Scheduled Date</th>
+                    <th>Status</th>
+                    <th>Priority</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let booking of filteredBookings">
+                    <td>{{ booking.bookingNumber }}</td>
+                    <td>
+                        <strong>{{ booking.serviceName }}</strong>
+                    </td>
+                    <td>{{ booking.customerName }}</td>
+                    <td>
+                        <span *ngIf="booking.technicianName">{{ booking.technicianName }}</span>
+                        <span *ngIf="!booking.technicianName" class="unassigned">Unassigned</span>
+                    </td>
+                    <td>{{ booking.scheduledDate | date:'short' }}</td>
+                    <td>
+                        <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
+                            {{ booking.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="priority-badge" [ngClass]="'priority-' + booking.priority.toLowerCase()">
+                            {{ booking.priority }}
+                        </span>
+                    </td>
+                    <td>
+                        <a [routerLink]="['/manager/bookings', booking.id]" class="btn-view">View</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="filteredBookings.length > 0">
+        <p>Showing {{ filteredBookings.length }} booking(s)</p>
+    </div>
+</div>
