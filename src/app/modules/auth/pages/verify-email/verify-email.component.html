@@ -1,0 +1,32 @@
+<div class="verify-container">
+    <div class="verify-card">
+        @if (verifying) {
+        <div class="loader">
+            <span class="spinner-large"></span>
+            <h2>Verifying your email...</h2>
+        </div>
+        } @else if (verified) {
+        <div class="success">
+            <div class="icon">✅</div>
+            <h2>Email Verified!</h2>
+            <p>Your email has been successfully verified.</p>
+            <a routerLink="/auth/login" class="btn btn-primary">Go to Login</a>
+        </div>
+        } @else if (error) {
+        <div class="error-box">
+            <div class="icon">❌</div>
+            <h2>Verification Failed</h2>
+            <p>{{ errorMessage }}</p>
+            <a routerLink="/auth/login" class="btn btn-secondary">Back to Login</a>
+        </div>
+        } @else {
+        <div class="info">
+            <div class="icon">📧</div>
+            <h2>Verification Email Sent</h2>
+            <p>Please check your email and click the verification link.</p>
+            <p class="note">If you haven't received the email, check your spam folder.</p>
+            <a routerLink="/auth/login" class="btn btn-secondary">Back to Login</a>
+        </div>
+        }
+    </div>
+</div>
