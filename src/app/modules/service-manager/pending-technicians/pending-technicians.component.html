@@ -1,0 +1,82 @@
+<div class="pending-technicians-page">
+    <h1>Pending Technician Approvals</h1>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading pending technicians...</p>
+    </div>
+
+    <div *ngIf="!loading && technicians.length === 0" class="empty-state">
+        <p>✅ No pending technician approvals</p>
+    </div>
+
+    <div class="technicians-grid" *ngIf="!loading && technicians.length > 0">
+        <div *ngFor="let technician of technicians" class="technician-card">
+            <!-- Header -->
+            <div class="card-header">
+                <div class="tech-info">
+                    <h3>{{ technician.userId }}</h3>
+                    <p class="specialization">{{ technician.specialization }}</p>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="card-body">
+                <div class="detail-row">
+                    <span class="label">Experience:</span>
+                    <span class="value">{{ technician.experience }} years</span>
+                </div>
+
+                <div class="detail-row" *ngIf="technician.certification">
+                    <span class="label">Certification:</span>
+                    <span class="value">{{ technician.certification }}</span>
+                </div>
+
+                <div class="detail-row" *ngIf="technician.skills && technician.skills.length > 0">
+                    <span class="label">Skills:</span>
+                    <div class="skills-list">
+                        <span *ngFor="let skill of technician.skills" class="skill-tag">
+                            {{ skill }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-row" *ngIf="technician.documentsUrl && technician.documentsUrl.length > 0">
+                    <span class="label">Documents:</span>
+                    <div class="documents-list">
+                        <a *ngFor="let doc of technician.documentsUrl" [href]="doc" target="_blank"
+                            class="document-link">
+                            📄 View Document
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card-actions">
+                <button (click)="approveTechnician(technician)" class="btn btn-approve">
+                    ✓ Approve
+                </button>
+                <button (click)="openRejectDialog(technician)" class="btn btn-reject">
+                    ✗ Reject
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Dialog -->
+    <div class="modal-overlay" *ngIf="showRejectDialog" (click)="closeRejectDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>Reject Technician</h2>
+            <p>Please provide a reason for rejecting this technician application:</p>
+
+            <textarea [(ngModel)]="rejectReason" placeholder="Enter rejection reason..." rows="4"></textarea>
+
+            <div class="modal-actions">
+                <button (click)="closeRejectDialog()" class="btn btn-cancel">Cancel</button>
+                <button (click)="confirmReject()" class="btn btn-reject" [disabled]="!rejectReason.trim()">
+                    Reject
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
