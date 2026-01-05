@@ -1,0 +1,89 @@
+<div class="invoices-page">
+    <div class="page-header">
+        <h1>My Invoices</h1>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="tabs">
+        <button *ngFor="let status of statusFilters" class="tab" [class.active]="selectedStatus === status"
+            (click)="filterByStatus(status)">
+            {{ status || 'All' }}
+        </button>
+    </div>
+
+    <!-- Invoices List -->
+    <div class="invoices-list" *ngIf="filteredInvoices.length > 0; else noInvoices">
+        <div *ngFor="let invoice of filteredInvoices" class="invoice-card">
+            <div class="invoice-header">
+                <div>
+                    <h3>{{ invoice.serviceName }}</h3>
+                    <span class="invoice-number">{{ invoice.invoiceNumber }}</span>
+                </div>
+                <span class="status-badge" [ngClass]="'status-' + invoice.status.toLowerCase()">
+                    {{ invoice.status }}
+                </span>
+            </div>
+
+            <div class="invoice-details">
+                <div class="detail-row">
+                    <span class="label">Booking</span>
+                    <span>{{ invoice.bookingNumber }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Amount</span>
+                    <span>₹{{ invoice.amount }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Tax</span>
+                    <span>₹{{ invoice.taxAmount }}</span>
+                </div>
+                <div class="detail-row total">
+                    <span class="label">Total</span>
+                    <span class="amount">₹{{ invoice.totalAmount }}</span>
+                </div>
+                <div class="detail-row" *ngIf="invoice.paymentMethod">
+                    <span class="label">Payment Method</span>
+                    <span>{{ invoice.paymentMethod }}</span>
+                </div>
+                <div class="detail-row" *ngIf="invoice.paidAt">
+                    <span class="label">Paid On</span>
+                    <span>{{ invoice.paidAt | date:'short' }}</span>
+                </div>
+            </div>
+
+            <div class="invoice-actions" *ngIf="invoice.status === 'PENDING'">
+                <button class="btn-pay" (click)="payInvoice(invoice)">Pay Now</button>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noInvoices>
+        <div class="no-invoices">
+            <p>No invoices found</p>
+        </div>
+    </ng-template>
+
+    <!-- Payment Dialog -->
+    <div class="modal" *ngIf="showPaymentDialog" (click)="showPaymentDialog = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Pay Invoice</h3>
+            <p *ngIf="selectedInvoice">Total Amount: <strong>₹{{ selectedInvoice.totalAmount }}</strong></p>
+
+            <div class="payment-methods">
+                <button *ngFor="let method of paymentMethods" class="payment-method"
+                    [class.selected]="selectedPaymentMethod === method" (click)="selectedPaymentMethod = method">
+                    <span class="method-icon">{{ getPaymentIcon(method) }}</span>
+                    <span>{{ method }}</span>
+                </button>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" (click)="showPaymentDialog = false">Cancel</button>
+                <button type="button" class="btn-primary" [disabled]="!selectedPaymentMethod"
+                    (click)="confirmPayment()">
+                    Confirm Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="services-page">
+    <div class="page-header">
+        <h1>Browse Services</h1>
+        <p>Find the perfect service for your home needs</p>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories-section">
+        <h2>Categories</h2>
+        <div class="categories-grid">
+            <div *ngFor="let category of categories" class="category-card"
+                [class.selected]="selectedCategoryId === category.id" (click)="selectCategory(category.id)">
+                <div class="category-icon">{{ category.iconUrl || '🔧' }}</div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description }}</p>
+            </div>
+            <div class="category-card" [class.selected]="selectedCategoryId === null" (click)="selectCategory(null)">
+                <div class="category-icon">📋</div>
+                <h3>All Services</h3>
+                <p>View all available services</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services -->
+    <div class="services-section">
+        <h2>{{ selectedCategoryId ? 'Services in Category' : 'All Services' }}</h2>
+        <div class="services-grid" *ngIf="filteredServices.length > 0; else noServices">
+            <div *ngFor="let service of filteredServices" class="service-card">
+                <div class="service-image">
+                    <img [src]="service.imageUrl || 'assets/placeholder-service.jpg'" [alt]="service.name">
+                </div>
+                <div class="service-content">
+                    <span class="service-category">{{ service.categoryName }}</span>
+                    <h3>{{ service.name }}</h3>
+                    <p>{{ service.description }}</p>
+                    <div class="service-footer">
+                        <span class="service-price">₹{{ service.basePrice }}</span>
+                        <button class="btn-book" (click)="bookService(service.id)">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ng-template #noServices>
+            <p class="no-services">No services available in this category</p>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,62 @@
+<div class="my-bookings-page">
+    <div class="page-header">
+        <h1>My Bookings</h1>
+        <button class="btn-new" routerLink="/customer/booking/create">+ New Booking</button>
+    </div>
+
+    <!-- Filter Tabs -->
+    <div class="tabs">
+        <button *ngFor="let status of statusFilters" class="tab" [class.active]="selectedStatus === status"
+            (click)="filterByStatus(status)">
+            {{ status || 'All' }}
+        </button>
+    </div>
+
+    <!-- Bookings List -->
+    <div class="bookings-list" *ngIf="filteredBookings.length > 0; else noBookings">
+        <div *ngFor="let booking of filteredBookings" class="booking-card"
+            [routerLink]="['/customer/bookings', booking.id]">
+            <div class="booking-header">
+                <div>
+                    <h3>{{ booking.serviceName }}</h3>
+                    <span class="booking-number">{{ booking.bookingNumber }}</span>
+                </div>
+                <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
+                    {{ booking.status }}
+                </span>
+            </div>
+
+            <div class="booking-details">
+                <div class="detail-item">
+                    <span class="icon">📅</span>
+                    <span>{{ booking.scheduledDate | date:'medium' }}</span>
+                </div>
+                <div class="detail-item" *ngIf="booking.technicianName">
+                    <span class="icon">👨‍🔧</span>
+                    <span>{{ booking.technicianName }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="icon">📍</span>
+                    <span>{{ booking.city }}, {{ booking.state }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="icon">⚡</span>
+                    <span class="priority" [ngClass]="'priority-' + booking.priority.toLowerCase()">
+                        {{ booking.priority }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="booking-footer">
+                <span class="created-date">Created: {{ booking.createdAt | date:'short' }}</span>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noBookings>
+        <div class="no-bookings">
+            <p>No bookings found</p>
+            <button class="btn-create" routerLink="/customer/booking/create">Create Your First Booking</button>
+        </div>
+    </ng-template>
+</div>

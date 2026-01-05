@@ -1,0 +1,66 @@
+<div class="dashboard">
+    <div class="dashboard-header">
+        <h1>Welcome, {{ user?.firstName }}!</h1>
+        <p>Manage your bookings and services</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.activeBookings }}</div>
+            <div class="stat-label">Active Bookings</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.completedBookings }}</div>
+            <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ stats.pendingInvoices }}</div>
+            <div class="stat-label">Pending Payments</div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="actions-section">
+        <h2>Quick Actions</h2>
+        <div class="actions-grid">
+            <a routerLink="/customer/services" class="action-card">
+                <span class="action-icon">🔍</span>
+                <h3>Browse Services</h3>
+                <p>Find and book home services</p>
+            </a>
+            <a routerLink="/customer/booking/create" class="action-card">
+                <span class="action-icon">➕</span>
+                <h3>New Booking</h3>
+                <p>Create a new service request</p>
+            </a>
+            <a routerLink="/customer/bookings" class="action-card">
+                <span class="action-icon">📋</span>
+                <h3>My Bookings</h3>
+                <p>View and manage bookings</p>
+            </a>
+            <a routerLink="/customer/invoices" class="action-card">
+                <span class="action-icon">💳</span>
+                <h3>Invoices</h3>
+                <p>View and pay invoices</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="recent-section" *ngIf="recentBookings.length > 0">
+        <h2>Recent Bookings</h2>
+        <div class="bookings-list">
+            <div *ngFor="let booking of recentBookings" class="booking-card"
+                [routerLink]="['/customer/bookings', booking.id]">
+                <div class="booking-info">
+                    <h3>{{ booking.serviceName }}</h3>
+                    <p>{{ booking.scheduledDate | date:'medium' }}</p>
+                </div>
+                <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
+                    {{ booking.status }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
