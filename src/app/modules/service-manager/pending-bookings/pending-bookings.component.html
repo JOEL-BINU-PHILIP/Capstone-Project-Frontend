@@ -1,0 +1,83 @@
+<div class="pending-bookings-page">
+    <h1>Pending Bookings</h1>
+    <p class="subtitle">Assign technicians to pending bookings</p>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading pending bookings...</p>
+    </div>
+
+    <div *ngIf="!loading && pendingBookings.length === 0" class="empty-state">
+        <p>✅ No pending bookings</p>
+    </div>
+
+    <div class="bookings-grid" *ngIf="!loading && pendingBookings.length > 0">
+        <div *ngFor="let booking of pendingBookings" class="booking-card">
+            <!-- Header -->
+            <div class="card-header">
+                <div>
+                    <h3>{{ booking.serviceName }}</h3>
+                    <span class="booking-number">{{ booking.bookingNumber }}</span>
+                </div>
+                <span class="priority-badge" [ngClass]="'priority-' + booking.priority.toLowerCase()">
+                    {{ booking.priority }}
+                </span>
+            </div>
+
+            <!-- Body -->
+            <div class="card-body">
+                <div class="detail-row">
+                    <strong>Customer:</strong> {{ booking.customerName }}
+                </div>
+                <div class="detail-row">
+                    <strong>Scheduled:</strong> {{ booking.scheduledDate | date:'medium' }}
+                </div>
+                <div class="detail-row">
+                    <strong>Location:</strong> {{ booking.city }}, {{ booking.state }}
+                </div>
+                <div class="detail-row">
+                    <strong>Problem:</strong> {{ booking.problemDescription }}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card-actions">
+                <button (click)="openAssignDialog(booking)" class="btn-assign">
+                    Assign Technician
+                </button>
+                <a [routerLink]="['/manager/bookings', booking.id]" class="btn-view">
+                    View Details
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assign Technician Dialog -->
+    <div class="modal-overlay" *ngIf="showAssignDialog" (click)="closeAssignDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>Assign Technician</h2>
+            <p *ngIf="selectedBooking">{{ selectedBooking.serviceName }} - {{ selectedBooking.bookingNumber }}</p>
+
+            <div class="technician-selection">
+                <label>Select Technician:</label>
+                <select [(ngModel)]="selectedTechnicianId">
+                    <option value="">-- Select a technician --</option>
+                    <option *ngFor="let tech of availableTechnicians" [value]="tech.userId">
+                        {{ tech.specialization }} ({{ tech.experience }} years) - {{ tech.completedJobs }} jobs
+                        <span *ngIf="tech.averageRating"> - ⭐ {{ tech.averageRating | number:'1.1-1' }}</span>
+                    </option>
+                </select>
+            </div>
+
+            <div *ngIf="availableTechnicians.length === 0" class="no-technicians">
+                <p>⚠️ No available technicians found for this service</p>
+            </div>
+
+            <div class="modal-actions">
+                <button (click)="closeAssignDialog()" class="btn btn-cancel">Cancel</button>
+                <button (click)="confirmAssign()" class="btn btn-assign" [disabled]="!selectedTechnicianId">
+                    Assign
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
