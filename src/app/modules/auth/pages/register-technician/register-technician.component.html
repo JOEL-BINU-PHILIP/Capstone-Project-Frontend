@@ -1,0 +1,102 @@
+<div class="register-container">
+    <div class="register-card">
+        <h1>Register as Technician</h1>
+        <p class="notice">Note: Your account will require email verification and manager approval before you can login.
+        </p>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <!-- Basic fields similar to customer -->
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" formControlName="username" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email *</label>
+                <input type="email" id="email" formControlName="email" class="form-control" />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name *</label>
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name *</label>
+                    <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+                </div>
+            </div>
+
+            <!-- Technician-specific fields -->
+            <div class="form-group">
+                <label for="skills">Skills (comma separated) *</label>
+                <input type="text" id="skills" formControlName="skillsInput" class="form-control"
+                    placeholder="Plumbing, Pipe Fitting, Leak Repair" />
+            </div>
+
+            <div class="form-group">
+                <label for="experienceYears">Years of Experience *</label>
+                <input type="number" id="experienceYears" formControlName="experienceYears" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="bio">Bio</label>
+                <textarea id="bio" formControlName="bio" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="idProofType">ID Proof Type *</label>
+                <select id="idProofType" formControlName="idProofType" class="form-control">
+                    <option value="AADHAAR">Aadhaar</option>
+                    <option value="PAN">PAN</option>
+                    <option value="DRIVING_LICENSE">Driving License</option>
+                    <option value="PASSPORT">Passport</option>
+                </select>
+            </div>
+
+            <!-- Contact and Address -->
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number *</label>
+                <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="city">City *</label>
+                    <input type="text" id="city" formControlName="city" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="state">State *</label>
+                    <input type="text" id="state" formControlName="state" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="zipCode">Zip Code *</label>
+                <input type="text" id="zipCode" formControlName="zipCode" class="form-control" />
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" formControlName="password" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                <span class="spinner"></span> Registering...
+                } @else {
+                Register as Technician
+                }
+            </button>
+        </form>
+
+        <div class="footer">
+            <p>Already have an account? <a routerLink="/auth/login">Sign In</a></p>
+        </div>
+    </div>
+</div>
