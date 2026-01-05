@@ -1,0 +1,53 @@
+<div class="audit-logs-page">
+    <h1>Audit Logs</h1>
+    <p class="subtitle">System activity and security logs</p>
+
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading audit logs...</p>
+    </div>
+
+    <div class="logs-container" *ngIf="!loading">
+        <div class="logs-table-container">
+            <table class="logs-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Details</th>
+                        <th>IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let log of logs">
+                        <td>{{ log.timestamp | date:'short' }}</td>
+                        <td>{{ log.userId }}</td>
+                        <td>
+                            <span class="action-badge">{{ log.action }}</span>
+                        </td>
+                        <td>{{ log.details }}</td>
+                        <td class="ip-address">{{ log.ipAddress || 'N/A' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalElements > 0">
+            <button (click)="previousPage()" [disabled]="currentPage === 0" class="btn-page">
+                ← Previous
+            </button>
+            <span class="page-info">
+                Page {{ currentPage + 1 }} of {{ totalPages }}
+                ({{ totalElements }} total)
+            </span>
+            <button (click)="nextPage()" [disabled]="currentPage >= totalPages - 1" class="btn-page">
+                Next →
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && logs.length === 0" class="empty-state">
+        <p>No audit logs found</p>
+    </div>
+</div>

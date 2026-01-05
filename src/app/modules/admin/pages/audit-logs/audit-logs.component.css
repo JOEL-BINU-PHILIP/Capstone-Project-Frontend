@@ -1,0 +1,116 @@
+.audit-logs-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1 {
+    font-size: 32px;
+    color: #1f2937;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 16px;
+    color: #6b7280;
+    margin-bottom: 32px;
+}
+
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6b7280;
+}
+
+.logs-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.logs-table-container {
+    overflow-x: auto;
+}
+
+.logs-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.logs-table thead {
+    background: #f9fafb;
+}
+
+.logs-table th {
+    padding: 16px;
+    text-align: left;
+    font-size: 12px;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.logs-table td {
+    padding: 16px;
+    border-top: 1px solid #e5e7eb;
+    font-size: 14px;
+    color: #1f2937;
+}
+
+.logs-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.action-badge {
+    background: #eff6ff;
+    color: #1e40af;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.ip-address {
+    font-family: monospace;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-page {
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-page:hover:not(:disabled) {
+    background: #2563eb;
+}
+
+.btn-page:disabled {
+    background: #93c5fd;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 14px;
+    color: #6b7280;
+}
