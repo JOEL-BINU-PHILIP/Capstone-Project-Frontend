@@ -1,0 +1,104 @@
+<div class="profile-page">
+    <h1>My Profile</h1>
+
+    <div class="profile-container" *ngIf="profile">
+        <!-- Basic Information -->
+        <div class="profile-section">
+            <h2>Basic Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>First Name</label>
+                    <p>{{ user?.firstName }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Last Name</label>
+                    <p>{{ user?.lastName }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
+                    <p>{{ user?.email }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Phone</label>
+                    <p>{{ user?.phoneNumber }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Professional Information -->
+        <div class="profile-section">
+            <h2>Professional Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Specialization</label>
+                    <p>{{ profile.specialization }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Experience</label>
+                    <p>{{ profile.experience }} years</p>
+                </div>
+                <div class="info-item">
+                    <label>Certification</label>
+                    <p>{{ profile.certification || 'N/A' }}</p>
+                </div>
+                <div class="info-item">
+                    <label>Availability</label>
+                    <div class="availability-control">
+                        <button class="toggle-btn"
+                            [ngClass]="profile.availability === 'AVAILABLE' ? 'available' : 'unavailable'"
+                            (click)="toggleAvailability()">
+                            {{ profile.availability }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="profile-section">
+            <h2>Skills</h2>
+            <div class="skills-container">
+                <span *ngFor="let skill of profile.skills" class="skill-tag">
+                    {{ skill }}
+                </span>
+            </div>
+
+            <!-- Add Skills Form -->
+            <div class="add-skills">
+                <input type="text" [(ngModel)]="newSkill" placeholder="Add a new skill" class="skill-input"
+                    (keydown.enter)="addSkill()">
+                <button (click)="addSkill()" class="btn-add">Add Skill</button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="profile-section">
+            <h2>Performance Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">{{ profile.completedJobs }}</div>
+                    <div class="stat-label">Completed Jobs</div>
+                </div>
+                <div class="stat-card" *ngIf="profile.averageRating">
+                    <div class="stat-value">⭐ {{ profile.averageRating | number:'1.1-1' }}</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents -->
+        <div class="profile-section" *ngIf="profile.documentsUrl">
+            <h2>Documents</h2>
+            <div class="documents-list">
+                <div *ngFor="let doc of profile.documentsUrl" class="document-item">
+                    <span>📄 {{ doc }}</span>
+                    <a [href]="doc" target="_blank" class="btn-view">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!profile" class="loading-state">
+        <p>Loading profile...</p>
+    </div>
+</div>

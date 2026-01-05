@@ -1,0 +1,162 @@
+<div class="booking-detail-page" *ngIf="booking">
+    <div class="page-header">
+        <div>
+            <h1>{{ booking.serviceName }}</h1>
+            <span class="booking-number">{{ booking.bookingNumber }}</span>
+        </div>
+        <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
+            {{ booking.status }}
+        </span>
+    </div>
+
+    <div class="detail-grid">
+        <!-- Customer Information -->
+        <div class="detail-section">
+            <h2>Customer Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Name</label>
+                    <span>{{ booking.customerName }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email</label>
+                    <span>{{ booking.customerEmail }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Phone</label>
+                    <span>{{ booking.customerPhone }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Information -->
+        <div class="detail-section">
+            <h2>Booking Details</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Service</label>
+                    <span>{{ booking.serviceName }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Scheduled Date</label>
+                    <span>{{ booking.scheduledDate | date:'medium' }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Priority</label>
+                    <span class="priority" [ngClass]="'priority-' + booking.priority.toLowerCase()">
+                        {{ booking.priority }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="info-item full-width">
+                <label>Problem Description</label>
+                <p>{{ booking.problemDescription }}</p>
+            </div>
+
+            <div class="info-item full-width" *ngIf="booking.specialInstructions">
+                <label>Special Instructions</label>
+                <p>{{ booking.specialInstructions }}</p>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="detail-section">
+            <h2>Service Address</h2>
+            <p>{{ booking.addressLine1 }}</p>
+            <p *ngIf="booking.addressLine2">{{ booking.addressLine2 }}</p>
+            <p>{{ booking.city }}, {{ booking.state }} {{ booking.zipCode }}</p>
+        </div>
+
+        <!-- Completion Details -->
+        <div class="detail-section" *ngIf="booking.status === 'COMPLETED' && booking.completionNotes">
+            <h2>Completion Details</h2>
+            <div class="info-item">
+                <label>Notes</label>
+                <p>{{ booking.completionNotes }}</p>
+            </div>
+            <div class="completion-images" *ngIf="booking.completionImages && booking.completionImages.length > 0">
+                <label>Completion Images</label>
+                <div class="image-grid">
+                    <img *ngFor="let image of booking.completionImages" [src]="image" alt="Completion">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions-section">
+        <button *ngIf="booking.status === 'ASSIGNED'" class="btn-confirm" (click)="confirmBooking()">
+            Confirm Booking
+        </button>
+
+        <button *ngIf="booking.status === 'ASSIGNED'" class="btn-reject" (click)="showRejectDialog = true">
+            Reject Booking
+        </button>
+
+        <button *ngIf="booking.status === 'CONFIRMED'" class="btn-start" (click)="startService()">
+            Start Service
+        </button>
+
+        <button *ngIf="booking.status === 'IN_PROGRESS'" class="btn-complete" (click)="showCompleteDialog = true">
+            Complete Service
+        </button>
+    </div>
+
+    <!-- Reject Dialog -->
+    <div class="modal" *ngIf="showRejectDialog" (click)="showRejectDialog = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Reject Booking</h3>
+            <p>Please provide a reason for rejecting:</p>
+            <textarea [(ngModel)]="rejectReason" rows="4" class="form-control" placeholder="Enter reason..."></textarea>
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" (click)="showRejectDialog = false">Cancel</button>
+                <button type="button" class="btn-danger" [disabled]="!rejectReason || rejectReason.length < 10"
+                    (click)="rejectBooking()">
+                    Confirm Reject
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Complete Dialog -->
+    <div class="modal" *ngIf="showCompleteDialog" (click)="showCompleteDialog = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Complete Service</h3>
+
+            <div class="form-group">
+                <label>Customer OTP *</label>
+                <input type="text" [(ngModel)]="completionOtp" class="form-control"
+                    placeholder="Enter 6-digit OTP from customer" maxlength="6" />
+            </div>
+
+            <div class="form-group">
+                <label>Completion Notes</label>
+                <textarea [(ngModel)]="completionNotes" rows="4" class="form-control"
+                    placeholder="Describe the work completed..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Completion Images (URLs)</label>
+                <input type="text" [(ngModel)]="imageUrl" class="form-control"
+                    placeholder="Enter image URL and press Add" />
+                <button type="button" class="btn-add" (click)="addImage()">Add Image</button>
+
+                <div class="image-list" *ngIf="completionImages.length > 0">
+                    <div *ngFor="let img of completionImages; let i = index" class="image-item">
+                        <span>{{ img }}</span>
+                        <button type="button" (click)="removeImage(i)">×</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" (click)="showCompleteDialog = false">Cancel</button>
+                <button type="button" class="btn-primary" [disabled]="!completionOtp || completionOtp.length !== 6"
+                    (click)="completeService()">
+                    Complete Service
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
