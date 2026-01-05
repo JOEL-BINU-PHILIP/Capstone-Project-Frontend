@@ -1,0 +1,69 @@
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Sign in to your account</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+            <!-- Username Field -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" formControlName="username" class="form-control"
+                    [class.error]="hasError('username', 'required')" placeholder="Enter your username" />
+                @if (hasError('username', 'required')) {
+                <span class="error-message">Username is required</span>
+                }
+                @if (hasError('username', 'minlength')) {
+                <span class="error-message">Username must be at least 3 characters</span>
+                }
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-input-wrapper">
+                    <input [type]="showPassword ? 'text' : 'password'" id="password" formControlName="password"
+                        class="form-control" [class.error]="hasError('password', 'required')"
+                        placeholder="Enter your password" />
+                    <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" tabindex="-1">
+                        {{ showPassword ? '👁️' : '👁️‍🗨️' }}
+                    </button>
+                </div>
+                @if (hasError('password', 'required')) {
+                <span class="error-message">Password is required</span>
+                }
+                @if (hasError('password', 'minlength')) {
+                <span class="error-message">Password must be at least 6 characters</span>
+                }
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                <span class="spinner"></span>
+                Signing in...
+                } @else {
+                Sign In
+                }
+            </button>
+        </form>
+
+        <!-- Registration Links -->
+        <div class="login-footer">
+            <p>Don't have an account?</p>
+            <div class="register-links">
+                <a routerLink="/auth/register/customer" class="link">Register as Customer</a>
+                <span>|</span>
+                <a routerLink="/auth/register/technician" class="link">Register as Technician</a>
+            </div>
+        </div>
+
+        <!-- Default Credentials Info -->
+        <div class="default-credentials">
+            <p><strong>Default Credentials:</strong></p>
+            <p>Admin: admin / Admin@123</p>
+            <p>Manager: service_manager / Manager@123</p>
+        </div>
+    </div>
+</div>
