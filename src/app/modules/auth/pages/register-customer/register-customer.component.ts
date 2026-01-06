@@ -81,6 +81,7 @@ export class RegisterCustomerComponent implements OnInit {
 
         this.authService.registerCustomer(request).subscribe({
             next: (response) => {
+                this.isSubmitting = false;
                 this.notificationService.success('Registration successful! Please check your email to verify your account.');
                 setTimeout(() => {
                     this.router.navigate(['/auth/verify-email']);
@@ -88,7 +89,19 @@ export class RegisterCustomerComponent implements OnInit {
             },
             error: (error) => {
                 this.isSubmitting = false;
-                const message = error.error?.message || 'Registration failed. Please try again.';
+                console.error('Registration error details:', error);
+
+                // Check if this might be a false error (registration actually succeeded)
+                // HTTP 201 Created is a success status, some errors might be parsing issues
+                if (error.status === 201 || error.status === 200) {
+                    this.notificationService.success('Registration successful! Please check your email to verify your account.');
+                    setTimeout(() => {
+                        this.router.navigate(['/auth/verify-email']);
+                    }, 2000);
+                    return;
+                }
+
+                const message = error.error?.message || error.userMessage || 'Registration failed. Please try again.';
                 this.notificationService.error(message);
             }
         });

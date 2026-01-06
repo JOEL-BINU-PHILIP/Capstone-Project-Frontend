@@ -1,49 +1,73 @@
 .register-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    padding: 40px 20px;
+    background: #fafafa;
+    padding: 32px 16px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .register-card {
-    background: white;
-    border-radius: 12px;
-    padding: 40px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    padding: 32px;
     max-width: 600px;
     width: 100%;
 }
 
 .notice {
-    background: #fef3c7;
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+    background: #fff8e1;
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: 1px solid #ffe082;
+    margin-bottom: 16px;
     font-size: 14px;
+    color: #212121;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
 }
 
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .form-group label {
     display: block;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 6px;
+    color: #212121;
+    font-size: 14px;
 }
 
 .form-control {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #000;
+}
+
+.form-control.error {
+    border-color: #d32f2f;
+    background-color: #fff5f5;
+}
+
+.error-message {
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 4px;
 }
 
 textarea.form-control {
@@ -52,28 +76,45 @@ textarea.form-control {
 
 .btn {
     width: 100%;
-    padding: 12px;
+    padding: 10px 12px;
     border: none;
-    border-radius: 6px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 16px;
+    transition: background-color 0.2s;
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background: #000;
+    color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #212121;
 }
 
 .btn:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .footer {
     text-align: center;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #eee;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.footer a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.footer a:hover {
+    text-decoration: underline;
 }
 
 .spinner {
@@ -81,7 +122,7 @@ textarea.form-control {
     width: 16px;
     height: 16px;
     border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
+    border-top-color: #fff;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
 }

@@ -7,22 +7,43 @@
             <!-- Basic fields similar to customer -->
             <div class="form-group">
                 <label for="username">Username *</label>
-                <input type="text" id="username" formControlName="username" class="form-control" />
+                <input type="text" id="username" formControlName="username" class="form-control"
+                    [class.error]="isInvalid('username')" />
+                <span class="error-message" *ngIf="hasError('username', 'required')">Username is required</span>
+                <span class="error-message" *ngIf="hasError('username', 'minlength')">Username must be at least 3
+                    characters</span>
+                <span class="error-message" *ngIf="hasError('username', 'maxlength')">Username cannot exceed 20
+                    characters</span>
+                <span class="error-message" *ngIf="hasError('username', 'pattern')">Username can only contain letters,
+                    numbers, and underscores</span>
             </div>
 
             <div class="form-group">
                 <label for="email">Email *</label>
-                <input type="email" id="email" formControlName="email" class="form-control" />
+                <input type="email" id="email" formControlName="email" class="form-control"
+                    [class.error]="isInvalid('email')" />
+                <span class="error-message" *ngIf="hasError('email', 'required')">Email is required</span>
+                <span class="error-message" *ngIf="hasError('email', 'email')">Please enter a valid email address</span>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="firstName">First Name *</label>
-                    <input type="text" id="firstName" formControlName="firstName" class="form-control" />
+                    <input type="text" id="firstName" formControlName="firstName" class="form-control"
+                        [class.error]="isInvalid('firstName')" />
+                    <span class="error-message" *ngIf="hasError('firstName', 'required')">First name is required</span>
+                    <span class="error-message" *ngIf="hasError('firstName', 'minlength')">At least 2 characters
+                        required</span>
+                    <span class="error-message" *ngIf="hasError('firstName', 'pattern')">Only letters allowed</span>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last Name *</label>
-                    <input type="text" id="lastName" formControlName="lastName" class="form-control" />
+                    <input type="text" id="lastName" formControlName="lastName" class="form-control"
+                        [class.error]="isInvalid('lastName')" />
+                    <span class="error-message" *ngIf="hasError('lastName', 'required')">Last name is required</span>
+                    <span class="error-message" *ngIf="hasError('lastName', 'minlength')">At least 2 characters
+                        required</span>
+                    <span class="error-message" *ngIf="hasError('lastName', 'pattern')">Only letters allowed</span>
                 </div>
             </div>
 
@@ -30,17 +51,28 @@
             <div class="form-group">
                 <label for="skills">Skills (comma separated) *</label>
                 <input type="text" id="skills" formControlName="skillsInput" class="form-control"
-                    placeholder="Plumbing, Pipe Fitting, Leak Repair" />
+                    [class.error]="isInvalid('skillsInput')" placeholder="Plumbing, Pipe Fitting, Leak Repair" />
+                <span class="error-message" *ngIf="hasError('skillsInput', 'required')">At least one skill is
+                    required</span>
             </div>
 
             <div class="form-group">
                 <label for="experienceYears">Years of Experience *</label>
-                <input type="number" id="experienceYears" formControlName="experienceYears" class="form-control" />
+                <input type="number" id="experienceYears" formControlName="experienceYears" class="form-control"
+                    [class.error]="isInvalid('experienceYears')" min="0" max="50" />
+                <span class="error-message" *ngIf="hasError('experienceYears', 'required')">Experience is
+                    required</span>
+                <span class="error-message" *ngIf="hasError('experienceYears', 'min')">Experience cannot be
+                    negative</span>
+                <span class="error-message" *ngIf="hasError('experienceYears', 'max')">Experience cannot exceed 50
+                    years</span>
             </div>
 
             <div class="form-group">
                 <label for="bio">Bio</label>
-                <textarea id="bio" formControlName="bio" class="form-control" rows="3"></textarea>
+                <textarea id="bio" formControlName="bio" class="form-control" rows="3" [class.error]="isInvalid('bio')"
+                    placeholder="Tell us about yourself..."></textarea>
+                <span class="error-message" *ngIf="hasError('bio', 'maxlength')">Bio cannot exceed 500 characters</span>
             </div>
 
             <div class="form-group">
@@ -56,34 +88,60 @@
             <!-- Contact and Address -->
             <div class="form-group">
                 <label for="phoneNumber">Phone Number *</label>
-                <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control" />
+                <input type="tel" id="phoneNumber" formControlName="phoneNumber" class="form-control"
+                    [class.error]="isInvalid('phoneNumber')" placeholder="10 digit mobile number" maxlength="10" />
+                <span class="error-message" *ngIf="hasError('phoneNumber', 'required')">Phone number is required</span>
+                <span class="error-message" *ngIf="hasError('phoneNumber', 'pattern')">Enter a valid 10-digit mobile
+                    number starting with 6-9</span>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="city">City *</label>
-                    <input type="text" id="city" formControlName="city" class="form-control" />
+                    <input type="text" id="city" formControlName="city" class="form-control"
+                        [class.error]="isInvalid('city')" />
+                    <span class="error-message" *ngIf="hasError('city', 'required')">City is required</span>
+                    <span class="error-message" *ngIf="hasError('city', 'minlength')">At least 2 characters
+                        required</span>
                 </div>
                 <div class="form-group">
                     <label for="state">State *</label>
-                    <input type="text" id="state" formControlName="state" class="form-control" />
+                    <input type="text" id="state" formControlName="state" class="form-control"
+                        [class.error]="isInvalid('state')" />
+                    <span class="error-message" *ngIf="hasError('state', 'required')">State is required</span>
+                    <span class="error-message" *ngIf="hasError('state', 'minlength')">At least 2 characters
+                        required</span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="zipCode">Zip Code *</label>
-                <input type="text" id="zipCode" formControlName="zipCode" class="form-control" />
+                <input type="text" id="zipCode" formControlName="zipCode" class="form-control"
+                    [class.error]="isInvalid('zipCode')" placeholder="6 digit PIN code" maxlength="6" />
+                <span class="error-message" *ngIf="hasError('zipCode', 'required')">Zip code is required</span>
+                <span class="error-message" *ngIf="hasError('zipCode', 'pattern')">Enter a valid 6-digit PIN code</span>
             </div>
 
             <!-- Password -->
             <div class="form-group">
                 <label for="password">Password *</label>
-                <input type="password" id="password" formControlName="password" class="form-control" />
+                <input type="password" id="password" formControlName="password" class="form-control"
+                    [class.error]="isInvalid('password')" />
+                <span class="error-message" *ngIf="hasError('password', 'required')">Password is required</span>
+                <span class="error-message" *ngIf="hasError('password', 'minlength')">Password must be at least 8
+                    characters</span>
+                <span class="error-message" *ngIf="hasError('password', 'pattern')">Password must contain uppercase,
+                    lowercase, and a number</span>
             </div>
 
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password *</label>
-                <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control" />
+                <input type="password" id="confirmPassword" formControlName="confirmPassword" class="form-control"
+                    [class.error]="isInvalid('confirmPassword')" />
+                <span class="error-message" *ngIf="hasError('confirmPassword', 'required')">Please confirm your
+                    password</span>
+                <span class="error-message" *ngIf="hasError('confirmPassword', 'passwordMismatch')">Passwords do not
+                    match</span>
             </div>
 
             <button type="submit" class="btn btn-primary" [disabled]="isSubmitting">
