@@ -83,14 +83,24 @@ export class AuthService {
      * Register customer
      */
     registerCustomer(data: RegisterCustomerRequest): Observable<any> {
-        return this.apiService.post('/api/auth/register/customer', data);
+        return this.apiService.post('/api/auth/register/customer', data)
+            .pipe(
+                tap(response => {
+                    console.log('Registration response:', response);
+                }),
+                catchError(error => {
+                    console.error('Registration error:', error);
+                    return throwError(() => error);
+                })
+            );
     }
 
     /**
      * Register technician
+     * Note: This endpoint returns text response, not JSON
      */
     registerTechnician(data: RegisterTechnicianRequest): Observable<any> {
-        return this.apiService.post('/api/auth/register/technician', data);
+        return this.apiService.postWithTextResponse('/api/auth/register/technician', data);
     }
 
     /**

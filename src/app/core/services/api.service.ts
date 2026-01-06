@@ -28,7 +28,21 @@ export class ApiService {
      */
     post<T>(endpoint: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
         const url = `${this.baseUrl}${endpoint}`;
-        return this.http.post<T>(url, body, options);
+        const headers = options?.headers || new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post<T>(url, body, { headers });
+    }
+
+    /**
+     * POST request with text response (for endpoints that return plain text or empty body)
+     */
+    postWithTextResponse(endpoint: string, body: any): Observable<string> {
+        const url = `${this.baseUrl}${endpoint}`;
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json'
+        });
+        return this.http.post(url, body, { headers, responseType: 'text' });
     }
 
     /**

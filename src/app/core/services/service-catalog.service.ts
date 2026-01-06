@@ -40,9 +40,10 @@ export class ServiceCatalogService {
 
     /**
      * Create category (Admin only)
+     * Note: Backend returns just the created category ID as plain text
      */
-    createCategory(request: CreateCategoryRequest): Observable<Category> {
-        return this.apiService.post<Category>(`${this.basePath}/categories`, request);
+    createCategory(request: CreateCategoryRequest): Observable<string> {
+        return this.apiService.postWithTextResponse(`${this.basePath}/categories`, request);
     }
 
     /**
@@ -92,9 +93,10 @@ export class ServiceCatalogService {
 
     /**
      * Create service (Admin only)
+     * Note: Backend returns just the created service ID as plain text
      */
-    createService(request: CreateServiceRequest): Observable<Service> {
-        return this.apiService.post<Service>(this.basePath, request);
+    createService(request: CreateServiceRequest): Observable<string> {
+        return this.apiService.postWithTextResponse(this.basePath, request);
     }
 
     /**
@@ -102,6 +104,14 @@ export class ServiceCatalogService {
      */
     updateService(id: string, request: UpdateServiceRequest): Observable<Service> {
         return this.apiService.put<Service>(`${this.basePath}/${id}`, request);
+    }
+
+    /**
+     * Update service status (Admin only)
+     * Note: Backend expects 'active' as query parameter
+     */
+    updateServiceStatus(id: string, active: boolean): Observable<Service> {
+        return this.apiService.put<Service>(`${this.basePath}/${id}/status?active=${active}`, {});
     }
 
     /**
