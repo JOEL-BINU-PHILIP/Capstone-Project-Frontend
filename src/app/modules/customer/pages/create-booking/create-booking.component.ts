@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BookingService } from '../../../../core/services/booking.service';
 import { ServiceCatalogService } from '../../../../core/services/service-catalog.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { Service, CreateBookingRequest, BookingPriority } from '../../../../core/models';
 
 @Component({
@@ -19,12 +20,14 @@ export class CreateBookingComponent implements OnInit {
   services: Service[] = [];
   selectedService: Service | null = null;
   isSubmitting = false;
+  minDateTime: string = '';
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly bookingService: BookingService,
     private readonly serviceCatalogService: ServiceCatalogService,
     private readonly notificationService: NotificationService,
+    private readonly authService: AuthService,
     private readonly router: Router,
     private readonly route: ActivatedRoute
   ) {
@@ -32,7 +35,7 @@ export class CreateBookingComponent implements OnInit {
       serviceId: ['', Validators.required],
       problemDescription: ['', [Validators.required, Validators.minLength(10)]],
       scheduledDate: ['', Validators.required],
-      priority: ['MEDIUM', Validators.required],
+      priority: ['NORMAL', Validators.required],
       addressLine1: ['', Validators.required],
       addressLine2: [''],
       city: ['', Validators.required],
@@ -43,7 +46,9 @@ export class CreateBookingComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setMinDateTime();
     this.loadServices();
+    this.prefillUserAddress();
 
     // Pre-select service if provided in query params
     this.route.queryParams.subscribe(params => {
@@ -55,6 +60,21 @@ export class CreateBookingComponent implements OnInit {
     // Update selected service when form changes
     this.bookingForm.get('serviceId')?.valueChanges.subscribe(serviceId => {
       this.selectedService = this.services.find(s => s.id === serviceId) || null;
+    });
+  }
+
+  /**
+   * Pre-fill address fields from current user's registered address
+   */
+  private prefillUserAddress(): void {
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.bookingForm.patchValue({
+          city: user.city || '',
+          state: user.state || '',
+          zipCode: user.zipCode || ''
+        });
+      }
     });
   }
 
@@ -86,19 +106,77 @@ export class CreateBookingComponent implements OnInit {
 
       this.bookingService.createBooking(request).subscribe({
         next: (booking) => {
+          this.isSubmitting = false;
           this.notificationService.success('Booking created successfully!');
-          this.router.navigate(['/customer/bookings', booking.id]);
+          // Navigate to bookings list if booking.id is not available
+          if (booking?.id) {
+            this.router.navigate(['/customer/bookings', booking.id]);
+          } else {
+            this.router.navigate(['/customer/bookings']);
+          }
         },
         error: (error) => {
           this.isSubmitting = false;
-          this.notificationService.error('Failed to create booking');
           console.error('Error creating booking:', error);
+
+          // Check if this is actually a success (HTTP 201 Created)
+          if (error.status === 201 || error.status === 200) {
+            this.notificationService.success('Booking created successfully!');
+            this.router.navigate(['/customer/bookings']);
+            return;
+          }
+
+          const message = error.error?.message || error.userMessage || 'Failed to create booking';
+          this.notificationService.error(message);
         }
       });
+    } else {
+      // Mark all fields as touched to show validation errors
+      this.markFormGroupTouched();
     }
   }
 
   cancel(): void {
     this.router.navigate(['/customer/services']);
+  }
+
+  /**
+   * Mark all form controls as touched to trigger validation display
+   */
+  private markFormGroupTouched(): void {
+    Object.keys(this.bookingForm.controls).forEach(key => {
+      const control = this.bookingForm.get(key);
+      control?.markAsTouched();
+    });
+  }
+
+  /**
+   * Check if a field has a specific error
+   */
+  hasError(field: string, error: string): boolean {
+    const control = this.bookingForm.get(field);
+    return !!(control && control.hasError(error) && control.touched);
+  }
+
+  /**
+   * Check if a field is invalid and touched
+   */
+  isInvalid(field: string): boolean {
+    const control = this.bookingForm.get(field);
+    return !!(control && control.invalid && control.touched);
+  }
+
+  /**
+   * Set minimum date-time to current date-time (prevent past dates)
+   */
+  private setMinDateTime(): void {
+    const now = new Date();
+    // Format: YYYY-MM-DDTHH:mm
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    this.minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 }

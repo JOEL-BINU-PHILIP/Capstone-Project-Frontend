@@ -1,66 +1,115 @@
 <div class="dashboard">
-    <div class="dashboard-header">
-        <h1>Welcome, {{ user?.firstName }}!</h1>
-        <p>Manage your bookings and services</p>
-    </div>
+    <!-- Left Section: Main Content -->
+    <div class="main-content">
+        <!-- Greeting Bar -->
+        <div class="greeting-bar">
+            <div class="greeting-text">
+                <h1>Hey {{ user?.firstName }}!</h1>
+                <p>Here's what's happening with your services</p>
+            </div>
+            <div class="date-display">
+                {{ today | date:'EEEE, MMM d' }}
+            </div>
+        </div>
 
-    <!-- Quick Stats -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value">{{ stats.activeBookings }}</div>
-            <div class="stat-label">Active Bookings</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ stats.completedBookings }}</div>
-            <div class="stat-label">Completed</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ stats.pendingInvoices }}</div>
-            <div class="stat-label">Pending Payments</div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="actions-section">
-        <h2>Quick Actions</h2>
-        <div class="actions-grid">
-            <a routerLink="/customer/services" class="action-card">
-                <span class="action-icon">🔍</span>
-                <h3>Browse Services</h3>
-                <p>Find and book home services</p>
-            </a>
-            <a routerLink="/customer/booking/create" class="action-card">
-                <span class="action-icon">➕</span>
-                <h3>New Booking</h3>
-                <p>Create a new service request</p>
-            </a>
-            <a routerLink="/customer/bookings" class="action-card">
-                <span class="action-icon">📋</span>
-                <h3>My Bookings</h3>
-                <p>View and manage bookings</p>
-            </a>
-            <a routerLink="/customer/invoices" class="action-card">
-                <span class="action-icon">💳</span>
-                <h3>Invoices</h3>
-                <p>View and pay invoices</p>
-            </a>
-        </div>
-    </div>
-
-    <!-- Recent Bookings -->
-    <div class="recent-section" *ngIf="recentBookings.length > 0">
-        <h2>Recent Bookings</h2>
-        <div class="bookings-list">
-            <div *ngFor="let booking of recentBookings" class="booking-card"
-                [routerLink]="['/customer/bookings', booking.id]">
-                <div class="booking-info">
-                    <h3>{{ booking.serviceName }}</h3>
-                    <p>{{ booking.scheduledDate | date:'medium' }}</p>
+        <!-- Stats Cards Row -->
+        <div class="stats-cards">
+            <div class="stat-card active-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats.activeBookings }}</span>
+                    <span class="stat-label">In Progress</span>
                 </div>
-                <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
-                    {{ booking.status }}
-                </span>
+            </div>
+            <div class="stat-card completed-card">
+                <div class="stat-icon">✓</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats.completedBookings }}</span>
+                    <span class="stat-label">Done</span>
+                </div>
+            </div>
+            <div class="stat-card pending-card">
+                <div class="stat-icon">₹</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats.pendingInvoices }}</span>
+                    <span class="stat-label">To Pay</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bookings Table -->
+        <div class="bookings-section">
+            <div class="section-title">
+                <h2>Your Bookings</h2>
+                <a routerLink="/customer/bookings">See all</a>
+            </div>
+
+            <div class="bookings-table" *ngIf="recentBookings.length > 0">
+                <div *ngFor="let booking of recentBookings" class="booking-row"
+                    [routerLink]="['/customer/bookings', booking.id]">
+                    <div class="booking-service">
+                        <strong>{{ booking.serviceName }}</strong>
+                        <span class="booking-date">{{ booking.scheduledDate | date:'MMM d, yyyy • h:mm a' }}</span>
+                    </div>
+                    <div class="booking-status" [ngClass]="'status-' + booking.status.toLowerCase()">
+                        {{ booking.status | titlecase }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-bookings" *ngIf="recentBookings.length === 0">
+                <p>No bookings found. Ready to get started?</p>
             </div>
         </div>
     </div>
+
+    <!-- Right Section: Quick Actions Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>Quick Actions</h3>
+        </div>
+
+        <div class="action-list">
+            <a routerLink="/customer/services" class="action-link">
+                <span class="action-icon">🔍</span>
+                <div class="action-text">
+                    <strong>Browse Services</strong>
+                    <small>Find what you need</small>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a routerLink="/customer/booking/create" class="action-link highlight">
+                <span class="action-icon">+</span>
+                <div class="action-text">
+                    <strong>New Booking</strong>
+                    <small>Schedule a service</small>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a routerLink="/customer/bookings" class="action-link">
+                <span class="action-icon">📋</span>
+                <div class="action-text">
+                    <strong>My Bookings</strong>
+                    <small>Track your requests</small>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+
+            <a routerLink="/customer/invoices" class="action-link">
+                <span class="action-icon">💳</span>
+                <div class="action-text">
+                    <strong>Payments</strong>
+                    <small>View invoices</small>
+                </div>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+
+        <div class="help-box">
+            <span>💬</span>
+            <p>Need help? Contact our support team anytime.</p>
+        </div>
+    </aside>
 </div>

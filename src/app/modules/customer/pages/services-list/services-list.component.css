@@ -1,101 +1,102 @@
 .services-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
+    width: 100%;
+    padding: 0 32px;
 }
 
 .page-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .page-header h1 {
-    font-size: 36px;
-    color: #1f2937;
-    margin-bottom: 12px;
+    font-size: 28px;
+    font-weight: 500;
+    color: #212121;
+    margin-bottom: 8px;
 }
 
 .page-header p {
-    font-size: 18px;
-    color: #6b7280;
+    font-size: 16px;
+    color: #757575;
 }
 
 .categories-section,
 .services-section {
-    margin-bottom: 48px;
+    margin-bottom: 40px;
 }
 
 .categories-section h2,
 .services-section h2 {
-    font-size: 24px;
-    color: #1f2937;
-    margin-bottom: 24px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #212121;
+    margin-bottom: 20px;
 }
 
 .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
 }
 
 .category-card {
-    background: white;
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
     cursor: pointer;
     text-align: center;
-    transition: all 0.2s;
+    transition: border-color 0.2s;
 }
 
 .category-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #000;
 }
 
 .category-card.selected {
-    border: 2px solid #3b82f6;
-    background: #eff6ff;
+    border: 2px solid #000;
+    background: #fafafa;
 }
 
 .category-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
+    font-size: 40px;
+    margin-bottom: 10px;
 }
 
 .category-card h3 {
-    font-size: 18px;
-    color: #1f2937;
-    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #212121;
+    margin-bottom: 6px;
 }
 
 .category-card p {
-    font-size: 14px;
-    color: #6b7280;
+    font-size: 13px;
+    color: #757575;
 }
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
 }
 
 .service-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
     overflow: hidden;
-    transition: all 0.2s;
+    transition: border-color 0.2s;
 }
 
 .service-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #000;
 }
 
 .service-image {
-    height: 200px;
-    background: #f3f4f6;
+    height: 180px;
+    background: #fafafa;
     overflow: hidden;
 }
 
@@ -106,29 +107,31 @@
 }
 
 .service-content {
-    padding: 20px;
+    padding: 16px;
 }
 
 .service-category {
     display: inline-block;
-    font-size: 12px;
-    color: #3b82f6;
-    background: #eff6ff;
-    padding: 4px 12px;
-    border-radius: 12px;
+    font-size: 11px;
+    color: #212121;
+    background: #f5f5f5;
+    padding: 3px 8px;
+    border-radius: 4px;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .service-content h3 {
-    font-size: 20px;
-    color: #1f2937;
-    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #212121;
+    margin-bottom: 6px;
 }
 
 .service-content p {
-    font-size: 14px;
-    color: #6b7280;
-    margin-bottom: 16px;
+    font-size: 13px;
+    color: #757575;
+    margin-bottom: 12px;
     line-height: 1.5;
 }
 
@@ -139,29 +142,47 @@
 }
 
 .service-price {
-    font-size: 24px;
-    font-weight: 700;
-    color: #059669;
+    font-size: 20px;
+    font-weight: 500;
+    color: #2e7d32;
 }
 
 .btn-book {
-    padding: 10px 24px;
-    background: #3b82f6;
-    color: white;
+    padding: 8px 20px;
+    background: #000;
+    color: #fff;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background-color 0.2s;
 }
 
 .btn-book:hover {
-    background: #2563eb;
+    background: #212121;
 }
 
 .no-services {
     text-align: center;
-    padding: 40px;
-    color: #6b7280;
-    font-size: 16px;
+    padding: 32px;
+    color: #757575;
+    font-size: 14px;
+}
+
+/* Placeholder icon for services without images */
+.placeholder-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 56px;
+    background: #fafafa;
+    color: #9e9e9e;
+}
+
+.service-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

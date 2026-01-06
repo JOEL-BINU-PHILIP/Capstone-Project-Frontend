@@ -1,0 +1,155 @@
+<div class="invoice-detail-page">
+    <!-- Loading State -->
+    <div class="loading" *ngIf="loading">
+        <p>Loading invoice...</p>
+    </div>
+
+    <!-- Invoice Content -->
+    <div class="invoice-container" *ngIf="invoice && !loading">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-left">
+                <button class="btn-back" (click)="goBack()">← Back</button>
+                <div class="title-section">
+                    <h1>Invoice #{{ invoice.invoiceNumber }}</h1>
+                    <span class="status-badge" [ngClass]="getStatusClass(invoice.status)">
+                        {{ invoice.status }}
+                    </span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" (click)="printInvoice()">🖨️ Print</button>
+                <button *ngIf="invoice.status === 'PENDING'" class="btn-primary" (click)="openPaymentDialog()">
+                    Pay Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Invoice Card -->
+        <div class="invoice-card">
+            <!-- Company Info -->
+            <div class="company-section">
+                <h2>🏠 HomeService</h2>
+                <p>Professional Home Services</p>
+            </div>
+
+            <!-- Invoice Info -->
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>Bill To</h3>
+                    <p class="customer-name">{{ invoice.customerName }}</p>
+                    <p class="customer-email">{{ invoice.customerEmail }}</p>
+                </div>
+                <div class="info-section">
+                    <h3>Invoice Details</h3>
+                    <div class="detail-row">
+                        <span class="label">Invoice Number:</span>
+                        <span>{{ invoice.invoiceNumber }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Booking Number:</span>
+                        <span>{{ invoice.bookingNumber }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Invoice Date:</span>
+                        <span>{{ invoice.createdAt | date:'mediumDate' }}</span>
+                    </div>
+                    <div class="detail-row" *ngIf="invoice.paidAt">
+                        <span class="label">Paid On:</span>
+                        <span>{{ invoice.paidAt | date:'medium' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Details -->
+            <div class="service-section">
+                <h3>Service Details</h3>
+                <table class="service-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th class="text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ invoice.serviceName }}</td>
+                            <td class="text-right">₹{{ invoice.basePrice | number:'1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Totals -->
+            <div class="totals-section">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span>₹{{ invoice.basePrice | number:'1.2-2' }}</span>
+                </div>
+                <div class="total-row">
+                    <span>Tax (GST)</span>
+                    <span>₹{{ invoice.taxAmount | number:'1.2-2' }}</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total Amount</span>
+                    <span>₹{{ invoice.totalAmount | number:'1.2-2' }}</span>
+                </div>
+            </div>
+
+            <!-- Payment Info -->
+            <div class="payment-info" *ngIf="invoice.status === 'PAID'">
+                <h3>Payment Information</h3>
+                <div class="detail-row">
+                    <span class="label">Payment Method:</span>
+                    <span>{{ getPaymentIcon(invoice.paymentMethod!) }} {{ invoice.paymentMethod }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">Payment Date:</span>
+                    <span>{{ invoice.paidAt | date:'medium' }}</span>
+                </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="notes-section" *ngIf="invoice.notes">
+                <h3>Notes</h3>
+                <p>{{ invoice.notes }}</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="invoice-footer">
+                <p>Thank you for choosing HomeService!</p>
+            </div>
+        </div>
+
+        <!-- View Booking Link -->
+        <div class="actions-footer">
+            <a [routerLink]="['/customer/bookings', invoice.bookingId]" class="btn-link">
+                View Related Booking →
+            </a>
+        </div>
+    </div>
+
+    <!-- Payment Dialog -->
+    <div class="modal" *ngIf="showPaymentDialog" (click)="showPaymentDialog = false">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <h3>Pay Invoice</h3>
+            <p *ngIf="invoice">Total Amount: <strong>₹{{ invoice.totalAmount | number:'1.2-2' }}</strong></p>
+
+            <div class="payment-methods">
+                <button *ngFor="let method of paymentMethods" class="payment-method"
+                    [class.selected]="selectedPaymentMethod === method" (click)="selectedPaymentMethod = method">
+                    <span class="method-icon">{{ getPaymentIcon(method) }}</span>
+                    <span>{{ method }}</span>
+                </button>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" (click)="showPaymentDialog = false">Cancel</button>
+                <button type="button" class="btn-primary" [disabled]="!selectedPaymentMethod"
+                    (click)="confirmPayment()">
+                    Confirm Payment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

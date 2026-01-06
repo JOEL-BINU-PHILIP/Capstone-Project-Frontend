@@ -16,6 +16,7 @@ import { Booking, BookingStatus, Invoice, InvoiceStatus } from '../../../../core
 export class CustomerDashboardComponent implements OnInit {
   user: any = null;
   recentBookings: Booking[] = [];
+  today = new Date();
   stats = {
     activeBookings: 0,
     completedBookings: 0,

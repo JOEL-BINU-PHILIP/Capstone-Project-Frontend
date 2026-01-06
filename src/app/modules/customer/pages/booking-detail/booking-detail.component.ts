@@ -52,6 +52,8 @@ export class BookingDetailComponent implements OnInit {
   loadBooking(id: string): void {
     this.bookingService.getBookingById(id).subscribe({
       next: (booking) => {
+        console.log('Booking data received:', booking);
+        console.log('Service Address:', booking.serviceAddress);
         this.booking = booking;
         // Load invoice if booking is completed
         if (booking.status === BookingStatus.COMPLETED) {
@@ -119,8 +121,9 @@ export class BookingDetailComponent implements OnInit {
   generateOtp(): void {
     if (this.booking) {
       this.bookingService.generateOtp(this.booking.id).subscribe({
-        next: (response) => {
-          this.booking!.otp = response.otp;
+        next: (otp) => {
+          // Response is the OTP string directly (after unwrapping from ApiResponse)
+          this.booking!.otp = otp;
           this.notificationService.success('OTP generated successfully');
         },
         error: (error) => {

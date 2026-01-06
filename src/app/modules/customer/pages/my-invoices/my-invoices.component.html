@@ -1,6 +1,8 @@
 <div class="invoices-page">
     <div class="page-header">
         <h1>My Invoices</h1>
+        <!-- Debug info - remove after fixing -->
+        <small style="color: #999;">Total: {{ invoices.length }} | Filtered: {{ filteredInvoices.length }}</small>
     </div>
 
     <!-- Filter Tabs -->
@@ -12,7 +14,7 @@
     </div>
 
     <!-- Invoices List -->
-    <div class="invoices-list" *ngIf="filteredInvoices.length > 0; else noInvoices">
+    <div class="invoices-list" *ngIf="filteredInvoices && filteredInvoices.length > 0; else noInvoices">
         <div *ngFor="let invoice of filteredInvoices" class="invoice-card">
             <div class="invoice-header">
                 <div>
@@ -31,7 +33,7 @@
                 </div>
                 <div class="detail-row">
                     <span class="label">Amount</span>
-                    <span>₹{{ invoice.amount }}</span>
+                    <span>₹{{ invoice.basePrice }}</span>
                 </div>
                 <div class="detail-row">
                     <span class="label">Tax</span>

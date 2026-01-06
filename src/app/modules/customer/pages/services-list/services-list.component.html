@@ -8,27 +8,31 @@
     <div class="categories-section">
         <h2>Categories</h2>
         <div class="categories-grid">
-            <div *ngFor="let category of categories" class="category-card"
-                [class.selected]="selectedCategoryId === category.id" (click)="selectCategory(category.id)">
-                <div class="category-icon">{{ category.iconUrl || '🔧' }}</div>
-                <h3>{{ category.name }}</h3>
-                <p>{{ category.description }}</p>
-            </div>
             <div class="category-card" [class.selected]="selectedCategoryId === null" (click)="selectCategory(null)">
                 <div class="category-icon">📋</div>
                 <h3>All Services</h3>
                 <p>View all available services</p>
+            </div>
+            <div *ngFor="let category of categories" class="category-card"
+                [class.selected]="selectedCategoryId === category.id" (click)="selectCategory(category.id)">
+                <div class="category-icon">{{ getCategoryIcon(category) }}</div>
+                <h3>{{ category.name }}</h3>
+                <p>{{ category.description }}</p>
             </div>
         </div>
     </div>
 
     <!-- Services -->
     <div class="services-section">
-        <h2>{{ selectedCategoryId ? 'Services in Category' : 'All Services' }}</h2>
+        <h2>{{ selectedCategoryName }}</h2>
         <div class="services-grid" *ngIf="filteredServices.length > 0; else noServices">
             <div *ngFor="let service of filteredServices" class="service-card">
                 <div class="service-image">
-                    <img [src]="service.imageUrl || 'assets/placeholder-service.jpg'" [alt]="service.name">
+                    <img [src]="service.imageUrl" [alt]="service.name" (error)="onImageError($event)"
+                        *ngIf="service.imageUrl; else placeholderImage">
+                    <ng-template #placeholderImage>
+                        <div class="placeholder-icon">🛠️</div>
+                    </ng-template>
                 </div>
                 <div class="service-content">
                     <span class="service-category">{{ service.categoryName }}</span>

@@ -38,10 +38,13 @@ export class MyBookingsComponent implements OnInit {
   loadBookings(): void {
     this.bookingService.getMyBookings().subscribe({
       next: (bookings) => {
-        this.bookings = bookings;
-        this.filteredBookings = bookings;
+        // Ensure bookings is always an array
+        this.bookings = Array.isArray(bookings) ? bookings : [];
+        this.filteredBookings = this.bookings;
       },
       error: (error) => {
+        this.bookings = [];
+        this.filteredBookings = [];
         this.notificationService.error('Failed to load bookings');
         console.error('Error loading bookings:', error);
       }
@@ -50,10 +53,10 @@ export class MyBookingsComponent implements OnInit {
 
   filterByStatus(status: BookingStatus | null): void {
     this.selectedStatus = status;
-    if (status) {
+    if (status && Array.isArray(this.bookings)) {
       this.filteredBookings = this.bookings.filter(b => b.status === status);
     } else {
-      this.filteredBookings = this.bookings;
+      this.filteredBookings = this.bookings || [];
     }
   }
 }

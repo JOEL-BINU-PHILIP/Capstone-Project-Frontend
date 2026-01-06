@@ -1,100 +1,123 @@
 .create-booking-page {
+    width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 32px;
 }
 
 .page-header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .page-header h1 {
-    font-size: 32px;
-    color: #1f2937;
+    font-size: 24px;
+    font-weight: 500;
+    color: #212121;
     margin-bottom: 8px;
 }
 
 .page-header p {
-    font-size: 18px;
-    color: #3b82f6;
-    font-weight: 600;
+    font-size: 16px;
+    color: #212121;
+    font-weight: 500;
 }
 
 .booking-form {
-    background: white;
-    padding: 32px;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #fff;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group label {
     display: block;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 8px;
+    font-weight: 500;
+    color: #212121;
+    margin-bottom: 6px;
+    font-size: 14px;
 }
 
 .form-control {
     width: 100%;
     padding: 10px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     font-size: 14px;
     transition: border-color 0.2s;
 }
 
 .form-control:focus {
     outline: none;
-    border-color: #3b82f6;
+    border-color: #000;
 }
 
 .form-row {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
 }
 
 .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
 .btn-cancel,
 .btn-submit {
-    padding: 12px 32px;
+    padding: 10px 24px;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s;
 }
 
 .btn-cancel {
-    background: #f3f4f6;
-    color: #6b7280;
+    background: #f5f5f5;
+    color: #757575;
+    border: 1px solid #e0e0e0;
 }
 
 .btn-cancel:hover {
-    background: #e5e7eb;
+    background: #eeeeee;
 }
 
 .btn-submit {
-    background: #3b82f6;
-    color: white;
+    background: #000;
+    color: #fff;
 }
 
 .btn-submit:hover:not(:disabled) {
-    background: #2563eb;
+    background: #212121;
 }
 
 .btn-submit:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: not-allowed;
+}
+
+/* Error styles */
+.form-control.error {
+    border-color: #d32f2f;
+    background-color: #ffebee;
+}
+
+.form-control.error:focus {
+    border-color: #d32f2f;
+}
+
+.error-message {
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
 }

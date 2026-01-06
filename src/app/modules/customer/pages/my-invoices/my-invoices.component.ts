@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BillingService } from '../../../../core/services/billing.service';
@@ -25,7 +25,8 @@ export class MyInvoicesComponent implements OnInit {
 
   constructor(
     private readonly billingService: BillingService,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -35,8 +36,11 @@ export class MyInvoicesComponent implements OnInit {
   loadInvoices(): void {
     this.billingService.getMyInvoices().subscribe({
       next: (invoices) => {
-        this.invoices = invoices;
-        this.filteredInvoices = invoices;
+        console.log('Invoices received in component:', invoices);
+        this.invoices = [...invoices]; // Create new array reference
+        this.filteredInvoices = [...invoices];
+        this.cdr.detectChanges(); // Force change detection
+        console.log('After setting - invoices:', this.invoices.length, 'filtered:', this.filteredInvoices.length);
       },
       error: (error) => {
         this.notificationService.error('Failed to load invoices');

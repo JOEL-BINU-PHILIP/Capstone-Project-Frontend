@@ -8,42 +8,63 @@
         <!-- Service Selection -->
         <div class="form-group">
             <label>Service *</label>
-            <select formControlName="serviceId" class="form-control">
+            <select formControlName="serviceId" class="form-control" [class.error]="isInvalid('serviceId')">
                 <option value="">Select a service</option>
                 <option *ngFor="let service of services" [value]="service.id">
                     {{ service.name }} - ₹{{ service.basePrice }}
                 </option>
             </select>
+            <span class="error-message" *ngIf="hasError('serviceId', 'required')">
+                Please select a service
+            </span>
         </div>
 
         <!-- Problem Description -->
         <div class="form-group">
             <label>Problem Description *</label>
             <textarea formControlName="problemDescription" rows="4" class="form-control"
+                [class.error]="isInvalid('problemDescription')"
                 placeholder="Describe your issue in detail..."></textarea>
+            <span class="error-message" *ngIf="hasError('problemDescription', 'required')">
+                Problem description is required
+            </span>
+            <span class="error-message" *ngIf="hasError('problemDescription', 'minlength')">
+                Description must be at least 10 characters long
+            </span>
         </div>
 
         <!-- Scheduled Date -->
         <div class="form-group">
             <label>Preferred Date & Time *</label>
-            <input type="datetime-local" formControlName="scheduledDate" class="form-control" />
+            <input type="datetime-local" formControlName="scheduledDate" class="form-control"
+                [class.error]="isInvalid('scheduledDate')" [min]="minDateTime" />
+            <span class="error-message" *ngIf="hasError('scheduledDate', 'required')">
+                Please select a preferred date and time
+            </span>
         </div>
 
         <!-- Priority -->
         <div class="form-group">
             <label>Priority *</label>
-            <select formControlName="priority" class="form-control">
+            <select formControlName="priority" class="form-control" [class.error]="isInvalid('priority')">
                 <option value="LOW">Low</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HIGH">High (Urgent)</option>
+                <option value="NORMAL">Normal</option>
+                <option value="HIGH">High</option>
+                <option value="URGENT">Urgent</option>
             </select>
+            <span class="error-message" *ngIf="hasError('priority', 'required')">
+                Please select a priority level
+            </span>
         </div>
 
         <!-- Address -->
         <div class="form-group">
             <label>Address Line 1 *</label>
             <input type="text" formControlName="addressLine1" class="form-control"
-                placeholder="Street address, apartment number" />
+                [class.error]="isInvalid('addressLine1')" placeholder="Street address, apartment number" />
+            <span class="error-message" *ngIf="hasError('addressLine1', 'required')">
+                Address is required
+            </span>
         </div>
 
         <div class="form-group">
@@ -54,17 +75,30 @@
         <div class="form-row">
             <div class="form-group">
                 <label>City *</label>
-                <input type="text" formControlName="city" class="form-control" />
+                <input type="text" formControlName="city" class="form-control" [class.error]="isInvalid('city')" />
+                <span class="error-message" *ngIf="hasError('city', 'required')">
+                    City is required
+                </span>
             </div>
 
             <div class="form-group">
                 <label>State *</label>
-                <input type="text" formControlName="state" class="form-control" />
+                <input type="text" formControlName="state" class="form-control" [class.error]="isInvalid('state')" />
+                <span class="error-message" *ngIf="hasError('state', 'required')">
+                    State is required
+                </span>
             </div>
 
             <div class="form-group">
                 <label>ZIP Code *</label>
-                <input type="text" formControlName="zipCode" class="form-control" />
+                <input type="text" formControlName="zipCode" class="form-control"
+                    [class.error]="isInvalid('zipCode')" />
+                <span class="error-message" *ngIf="hasError('zipCode', 'required')">
+                    ZIP code is required
+                </span>
+                <span class="error-message" *ngIf="hasError('zipCode', 'pattern')">
+                    Please enter a valid 6-digit ZIP code
+                </span>
             </div>
         </div>
 
@@ -78,7 +112,7 @@
         <!-- Actions -->
         <div class="form-actions">
             <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-            <button type="submit" class="btn-submit" [disabled]="!bookingForm.valid || isSubmitting">
+            <button type="submit" class="btn-submit" [disabled]="isSubmitting">
                 {{ isSubmitting ? 'Creating...' : 'Create Booking' }}
             </button>
         </div>

@@ -37,7 +37,11 @@
                 </div>
                 <div class="detail-item">
                     <span class="icon">📍</span>
-                    <span>{{ booking.city }}, {{ booking.state }}</span>
+                    <span *ngIf="booking.serviceAddress?.city">{{ booking.serviceAddress?.city }}, {{
+                        booking.serviceAddress?.state }}</span>
+                    <span *ngIf="!booking.serviceAddress?.city && booking.city">{{ booking.city }}, {{ booking.state
+                        }}</span>
+                    <span *ngIf="!booking.serviceAddress?.city && !booking.city">-</span>
                 </div>
                 <div class="detail-item">
                     <span class="icon">⚡</span>
@@ -55,8 +59,15 @@
 
     <ng-template #noBookings>
         <div class="no-bookings">
-            <p>No bookings found</p>
-            <button class="btn-create" routerLink="/customer/booking/create">Create Your First Booking</button>
+            <!-- Show different message based on whether there are any bookings at all -->
+            <ng-container *ngIf="bookings.length === 0; else noFilteredBookings">
+                <p>No bookings found</p>
+                <button class="btn-create" routerLink="/customer/booking/create">Create Your First Booking</button>
+            </ng-container>
+            <ng-template #noFilteredBookings>
+                <p>No {{ selectedStatus?.toLowerCase() }} bookings found</p>
+                <button class="btn-view-all" (click)="filterByStatus(null)">View All Bookings</button>
+            </ng-template>
         </div>
     </ng-template>
 </div>
