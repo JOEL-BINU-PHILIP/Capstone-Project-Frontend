@@ -1,19 +1,19 @@
 .user-management-page {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
+    width: 100%;
+    padding: 0 32px;
 }
 
 .page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 h1 {
-    font-size: 32px;
-    color: #1f2937;
+    font-size: 28px;
+    color: #212121;
+    font-weight: 500;
 }
 
 .filters {
@@ -22,9 +22,9 @@ h1 {
 }
 
 select {
-    padding: 10px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
+    padding: 8px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     font-size: 14px;
     background: white;
     cursor: pointer;
@@ -32,21 +32,20 @@ select {
 
 select:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #000;
 }
 
 .loading-state,
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
-    color: #6b7280;
+    padding: 48px 20px;
+    color: #757575;
 }
 
 .users-table-container {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
     overflow-x: auto;
 }
 
@@ -57,28 +56,28 @@ select:focus {
 }
 
 .users-table thead {
-    background: #f9fafb;
+    background: #fafafa;
 }
 
 .users-table th {
-    padding: 16px;
+    padding: 14px 16px;
     text-align: left;
     font-size: 12px;
-    color: #6b7280;
+    color: #757575;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: 0.5px;
 }
 
 .users-table td {
-    padding: 16px;
-    border-top: 1px solid #e5e7eb;
+    padding: 14px 16px;
+    border-top: 1px solid #e0e0e0;
     font-size: 14px;
-    color: #1f2937;
+    color: #212121;
 }
 
 .users-table tbody tr:hover {
-    background: #f9fafb;
+    background: #fafafa;
 }
 
 .roles-list {
@@ -88,43 +87,44 @@ select:focus {
 }
 
 .role-badge {
-    background: #eff6ff;
-    color: #1e40af;
+    background: #fafafa;
+    color: #212121;
     padding: 4px 10px;
-    border-radius: 12px;
+    border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
     position: relative;
+    border: 1px solid #e0e0e0;
 }
 
 .remove-role {
     margin-left: 6px;
     background: none;
     border: none;
-    color: #991b1b;
+    color: #d32f2f;
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 500;
     cursor: pointer;
     padding: 0;
     line-height: 1;
 }
 
 .status-badge {
-    padding: 6px 12px;
-    border-radius: 16px;
+    padding: 4px 10px;
+    border-radius: 4px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
 }
 
 .status-active {
-    background: #d1fae5;
-    color: #065f46;
+    background: #e8f5e9;
+    color: #2e7d32;
 }
 
 .status-locked {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #ffebee;
+    color: #d32f2f;
 }
 
 .action-buttons {
@@ -133,36 +133,46 @@ select:focus {
 }
 
 .btn-action {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
     font-size: 16px;
+    background: white;
 }
 
 .btn-lock {
-    background: #fee2e2;
+    border-color: #ffcdd2;
+    background: #ffebee;
 }
 
 .btn-lock:hover {
-    background: #fecaca;
+    background: #ffcdd2;
 }
 
 .btn-unlock {
-    background: #d1fae5;
+    border-color: #c8e6c9;
+    background: #e8f5e9;
 }
 
 .btn-unlock:hover {
-    background: #a7f3d0;
+    background: #c8e6c9;
 }
 
 .btn-role {
-    background: #dbeafe;
+    border-color: #e0e0e0;
+    background: #fafafa;
 }
 
 .btn-role:hover {
-    background: #bfdbfe;
+    background: #f5f5f5;
+}
+
+.current-user-label {
+    font-size: 12px;
+    color: #757575;
+    font-style: italic;
 }
 
 /* Modal */
@@ -178,21 +188,23 @@ select:focus {
 
 .modal {
     background: white;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 24px;
     max-width: 500px;
     width: 90%;
+    border: 1px solid #e0e0e0;
 }
 
 .modal h2 {
-    font-size: 20px;
-    color: #1f2937;
+    font-size: 18px;
+    color: #212121;
     margin-bottom: 8px;
+    font-weight: 500;
 }
 
 .modal p {
     font-size: 14px;
-    color: #6b7280;
+    color: #757575;
     margin-bottom: 20px;
 }
 
@@ -205,8 +217,8 @@ select:focus {
 .add-role label {
     display: block;
     font-size: 14px;
-    font-weight: 600;
-    color: #374151;
+    font-weight: 500;
+    color: #212121;
     margin-bottom: 8px;
 }
 
@@ -216,8 +228,9 @@ select:focus {
     gap: 8px;
     min-height: 40px;
     padding: 12px;
-    background: #f9fafb;
-    border-radius: 8px;
+    background: #fafafa;
+    border-radius: 4px;
+    border: 1px solid #e0e0e0;
 }
 
 .add-role {
@@ -235,22 +248,22 @@ select:focus {
 }
 
 .btn-add-role {
-    padding: 10px 20px;
-    background: #3b82f6;
+    padding: 8px 16px;
+    background: #000;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
 }
 
 .btn-add-role:hover {
-    background: #2563eb;
+    background: #212121;
 }
 
 .btn-add-role:disabled {
-    background: #93c5fd;
+    background: #9e9e9e;
     cursor: not-allowed;
 }
 
@@ -260,18 +273,19 @@ select:focus {
 }
 
 .btn {
-    padding: 10px 24px;
+    padding: 8px 20px;
     border: none;
-    border-radius: 8px;
-    font-weight: 600;
+    border-radius: 4px;
+    font-weight: 500;
     cursor: pointer;
 }
 
 .btn-close {
-    background: #e5e7eb;
-    color: #1f2937;
+    background: #fafafa;
+    color: #212121;
+    border: 1px solid #e0e0e0;
 }
 
 .btn-close:hover {
-    background: #d1d5db;
+    background: #f5f5f5;
 }

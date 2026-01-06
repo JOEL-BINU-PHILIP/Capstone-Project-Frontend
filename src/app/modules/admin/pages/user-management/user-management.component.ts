@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../../core/services/admin.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { User, Role } from '../../../../core/models';
 
@@ -24,6 +25,7 @@ export class UserManagementComponent implements OnInit {
 
   constructor(
     private readonly adminService: AdminService,
+    private readonly authService: AuthService,
     private readonly notificationService: NotificationService
   ) { }
 
@@ -34,6 +36,11 @@ export class UserManagementComponent implements OnInit {
   hasRole(role: string): boolean {
     if (!this.selectedUser || !role) return false;
     return this.selectedUser.roles.includes(role as Role);
+  }
+
+  isCurrentUser(user: User): boolean {
+    const currentUser = this.authService.getCurrentUser();
+    return currentUser?.id === user.id;
   }
 
   loadUsers(): void {
@@ -55,7 +62,7 @@ export class UserManagementComponent implements OnInit {
 
   applyFilters(): void {
     this.filteredUsers = this.users.filter(user => {
-      if (this.roleFilter && !user.roles.includes(this.roleFilter as Role)) {
+      if (this.roleFilter && !user.roles.includes(this.roleFilter as any)) {
         return false;
       }
       if (this.statusFilter === 'locked' && !user.accountLocked) {
@@ -70,6 +77,13 @@ export class UserManagementComponent implements OnInit {
 
   lockUser(user: User): void {
     if (!user.id) return;
+
+    // Prevent admin from locking themselves
+    const currentUser = this.authService.getCurrentUser();
+    if (currentUser && currentUser.id === user.id) {
+      this.notificationService.error('You cannot lock your own account');
+      return;
+    }
 
     this.adminService.lockUser(user.id).subscribe({
       next: () => {

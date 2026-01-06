@@ -17,13 +17,16 @@ export class ServiceCatalogManagementComponent implements OnInit {
   services: Service[] = [];
   showCategoryDialog = false;
   showServiceDialog = false;
+  showDeleteConfirm = false;
   editingCategory: Category | null = null;
   editingService: Service | null = null;
+  deleteTarget: { type: 'category' | 'service'; item: Category | Service } | null = null;
 
   categoryForm: any = {
     name: '',
     description: '',
-    imageUrl: ''
+    iconUrl: '',
+    displayOrder: 1
   };
 
   serviceForm: any = {
@@ -73,13 +76,22 @@ export class ServiceCatalogManagementComponent implements OnInit {
   // Category Methods
   openCategoryDialog(): void {
     this.editingCategory = null;
-    this.categoryForm = { name: '', description: '', imageUrl: '' };
+    // Set displayOrder to next available order
+    const maxOrder = this.categories.length > 0
+      ? Math.max(...this.categories.map(c => c.displayOrder || 0))
+      : 0;
+    this.categoryForm = { name: '', description: '', iconUrl: '', displayOrder: maxOrder + 1 };
     this.showCategoryDialog = true;
   }
 
   editCategory(category: Category): void {
     this.editingCategory = category;
-    this.categoryForm = { ...category };
+    this.categoryForm = {
+      name: category.name,
+      description: category.description,
+      iconUrl: category.iconUrl || '',
+      displayOrder: category.displayOrder || 1
+    };
     this.showCategoryDialog = true;
   }
 
@@ -123,20 +135,48 @@ export class ServiceCatalogManagementComponent implements OnInit {
 
   deleteCategory(category: Category): void {
     if (!category.id) return;
+    this.deleteTarget = { type: 'category', item: category };
+    this.showDeleteConfirm = true;
+  }
 
-    if (!confirm(`Are you sure you want to delete "${category.name}"?`)) return;
+  confirmDelete(): void {
+    if (!this.deleteTarget) return;
 
-    this.serviceCatalogService.deleteCategory(category.id).subscribe({
-      next: () => {
-        this.notificationService.success('Category deleted successfully');
-        this.loadCategories();
-        this.loadServices();
-      },
-      error: (error) => {
-        console.error('Error deleting category:', error);
-        this.notificationService.error('Failed to delete category');
-      }
-    });
+    if (this.deleteTarget.type === 'category') {
+      const category = this.deleteTarget.item as Category;
+      this.serviceCatalogService.deleteCategory(category.id!).subscribe({
+        next: () => {
+          this.notificationService.success('Category deleted successfully');
+          this.loadCategories();
+          this.loadServices();
+          this.closeDeleteConfirm();
+        },
+        error: (error) => {
+          console.error('Error deleting category:', error);
+          this.notificationService.error('Failed to delete category');
+          this.closeDeleteConfirm();
+        }
+      });
+    } else {
+      const service = this.deleteTarget.item as Service;
+      this.serviceCatalogService.deleteService(service.id!).subscribe({
+        next: () => {
+          this.notificationService.success('Service deleted successfully');
+          this.loadServices();
+          this.closeDeleteConfirm();
+        },
+        error: (error) => {
+          console.error('Error deleting service:', error);
+          this.notificationService.error('Failed to delete service');
+          this.closeDeleteConfirm();
+        }
+      });
+    }
+  }
+
+  closeDeleteConfirm(): void {
+    this.showDeleteConfirm = false;
+    this.deleteTarget = null;
   }
 
   // Service Methods
@@ -172,11 +212,40 @@ export class ServiceCatalogManagementComponent implements OnInit {
     }
 
     if (this.editingService?.id) {
-      this.serviceCatalogService.updateService(this.editingService.id, this.serviceForm).subscribe({
+      // When editing, check if status changed
+      const statusChanged = this.editingService.active !== this.serviceForm.active;
+
+      // Prepare update request (without 'active' field as backend doesn't accept it)
+      const updateRequest = {
+        name: this.serviceForm.name,
+        description: this.serviceForm.description,
+        categoryId: this.serviceForm.categoryId,
+        basePrice: this.serviceForm.basePrice,
+        estimatedDuration: this.serviceForm.estimatedDuration,
+        imageUrl: this.serviceForm.imageUrl
+      };
+
+      // Update service details first
+      this.serviceCatalogService.updateService(this.editingService.id, updateRequest).subscribe({
         next: () => {
-          this.notificationService.success('Service updated successfully');
-          this.loadServices();
-          this.closeServiceDialog();
+          // If status changed, update it separately
+          if (statusChanged && this.editingService?.id) {
+            this.serviceCatalogService.updateServiceStatus(this.editingService.id, this.serviceForm.active).subscribe({
+              next: () => {
+                this.notificationService.success('Service updated successfully');
+                this.loadServices();
+                this.closeServiceDialog();
+              },
+              error: (error) => {
+                console.error('Error updating service status:', error);
+                this.notificationService.error('Failed to update service status');
+              }
+            });
+          } else {
+            this.notificationService.success('Service updated successfully');
+            this.loadServices();
+            this.closeServiceDialog();
+          }
         },
         error: (error) => {
           console.error('Error updating service:', error);
@@ -184,7 +253,17 @@ export class ServiceCatalogManagementComponent implements OnInit {
         }
       });
     } else {
-      this.serviceCatalogService.createService(this.serviceForm).subscribe({
+      // Create new service (without 'active' - new services are active by default)
+      const createRequest = {
+        name: this.serviceForm.name,
+        description: this.serviceForm.description,
+        categoryId: this.serviceForm.categoryId,
+        basePrice: this.serviceForm.basePrice,
+        estimatedDuration: this.serviceForm.estimatedDuration,
+        imageUrl: this.serviceForm.imageUrl
+      };
+
+      this.serviceCatalogService.createService(createRequest).subscribe({
         next: () => {
           this.notificationService.success('Service created successfully');
           this.loadServices();
@@ -200,18 +279,7 @@ export class ServiceCatalogManagementComponent implements OnInit {
 
   deleteService(service: Service): void {
     if (!service.id) return;
-
-    if (!confirm(`Are you sure you want to delete "${service.name}"?`)) return;
-
-    this.serviceCatalogService.deleteService(service.id).subscribe({
-      next: () => {
-        this.notificationService.success('Service deleted successfully');
-        this.loadServices();
-      },
-      error: (error) => {
-        console.error('Error deleting service:', error);
-        this.notificationService.error('Failed to delete service');
-      }
-    });
+    this.deleteTarget = { type: 'service', item: service };
+    this.showDeleteConfirm = true;
   }
 }

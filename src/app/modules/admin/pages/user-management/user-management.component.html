@@ -5,10 +5,10 @@
         <div class="filters">
             <select [(ngModel)]="roleFilter" (change)="applyFilters()">
                 <option value="">All Roles</option>
-                <option value="CUSTOMER">Customer</option>
-                <option value="TECHNICIAN">Technician</option>
-                <option value="SERVICE_MANAGER">Service Manager</option>
-                <option value="ADMIN">Admin</option>
+                <option value="ROLE_CUSTOMER">Customer</option>
+                <option value="ROLE_TECHNICIAN">Technician</option>
+                <option value="ROLE_SERVICE_MANAGER">Service Manager</option>
+                <option value="ROLE_ADMIN">Admin</option>
             </select>
             <select [(ngModel)]="statusFilter" (change)="applyFilters()">
                 <option value="">All Status</option>
@@ -54,7 +54,7 @@
                         </span>
                     </td>
                     <td>
-                        <div class="action-buttons">
+                        <div class="action-buttons" *ngIf="!isCurrentUser(user)">
                             <button *ngIf="!user.accountLocked" (click)="lockUser(user)" class="btn-action btn-lock"
                                 title="Lock User">
                                 🔒
@@ -63,10 +63,8 @@
                                 title="Unlock User">
                                 🔓
                             </button>
-                            <button (click)="openRoleDialog(user)" class="btn-action btn-role" title="Manage Roles">
-                                👤
-                            </button>
                         </div>
+                        <span *ngIf="isCurrentUser(user)" class="current-user-label">You</span>
                     </td>
                 </tr>
             </tbody>
@@ -75,41 +73,5 @@
 
     <div *ngIf="!loading && filteredUsers.length === 0" class="empty-state">
         <p>No users found</p>
-    </div>
-
-    <!-- Role Management Dialog -->
-    <div class="modal-overlay" *ngIf="showRoleDialog" (click)="closeRoleDialog()">
-        <div class="modal" (click)="$event.stopPropagation()">
-            <h2>Manage Roles</h2>
-            <p *ngIf="selectedUser">{{ selectedUser.username }} - {{ selectedUser.email }}</p>
-
-            <div class="current-roles">
-                <label>Current Roles:</label>
-                <div class="roles-display">
-                    <span *ngFor="let role of selectedUser?.roles" class="role-badge">
-                        {{ role }}
-                        <button (click)="removeRole(role)" class="remove-role">×</button>
-                    </span>
-                </div>
-            </div>
-
-            <div class="add-role">
-                <label>Add Role:</label>
-                <select [(ngModel)]="newRole">
-                    <option value="">-- Select a role --</option>
-                    <option value="CUSTOMER">Customer</option>
-                    <option value="TECHNICIAN">Technician</option>
-                    <option value="SERVICE_MANAGER">Service Manager</option>
-                    <option value="ADMIN">Admin</option>
-                </select>
-                <button (click)="addRole()" class="btn-add-role" [disabled]="!newRole || hasRole(newRole)">
-                    Add
-                </button>
-            </div>
-
-            <div class="modal-actions">
-                <button (click)="closeRoleDialog()" class="btn btn-close">Close</button>
-            </div>
-        </div>
     </div>
 </div>
