@@ -63,9 +63,25 @@
         <!-- Address -->
         <div class="detail-section">
             <h2>Service Address</h2>
-            <p>{{ booking.addressLine1 }}</p>
-            <p *ngIf="booking.addressLine2">{{ booking.addressLine2 }}</p>
-            <p>{{ booking.city }}, {{ booking.state }} {{ booking.zipCode }}</p>
+            <!-- Handle nested serviceAddress object -->
+            <ng-container *ngIf="booking.serviceAddress?.addressLine1">
+                <p>{{ booking.serviceAddress?.addressLine1 }}</p>
+                <p *ngIf="booking.serviceAddress?.addressLine2">{{ booking.serviceAddress?.addressLine2 }}</p>
+                <p *ngIf="booking.serviceAddress?.city">{{ booking.serviceAddress?.city }}<span
+                        *ngIf="booking.serviceAddress?.state">, {{ booking.serviceAddress?.state }}</span> {{
+                    booking.serviceAddress?.zipCode }}</p>
+            </ng-container>
+            <!-- Fallback to flat address fields -->
+            <ng-container *ngIf="!booking.serviceAddress?.addressLine1 && booking.addressLine1">
+                <p>{{ booking.addressLine1 }}</p>
+                <p *ngIf="booking.addressLine2">{{ booking.addressLine2 }}</p>
+                <p *ngIf="booking.city">{{ booking.city }}<span *ngIf="booking.state">, {{ booking.state }}</span> {{
+                    booking.zipCode }}</p>
+            </ng-container>
+            <!-- No address available -->
+            <p *ngIf="!booking.serviceAddress?.addressLine1 && !booking.addressLine1" class="no-address">
+                Address not available
+            </p>
         </div>
 
         <!-- Completion Details -->

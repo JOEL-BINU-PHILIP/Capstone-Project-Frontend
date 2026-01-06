@@ -17,9 +17,11 @@ export class TechnicianDashboardComponent implements OnInit {
   user: any = null;
   profile: TechnicianProfile | null = null;
   recentBookings: Booking[] = [];
+  today = new Date();
   stats = {
     assignedBookings: 0,
-    inProgressBookings: 0
+    inProgressBookings: 0,
+    completedBookings: 0
   };
 
   constructor(
@@ -54,6 +56,9 @@ export class TechnicianDashboardComponent implements OnInit {
         ).length;
         this.stats.inProgressBookings = bookingList.filter((b: Booking) =>
           b.status === BookingStatus.IN_PROGRESS
+        ).length;
+        this.stats.completedBookings = bookingList.filter((b: Booking) =>
+          b.status === BookingStatus.COMPLETED
         ).length;
       },
       error: (error) => console.error('Error loading bookings:', error)

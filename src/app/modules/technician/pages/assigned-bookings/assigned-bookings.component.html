@@ -1,6 +1,6 @@
 <div class="bookings-page">
     <div class="page-header">
-        <h1>Assigned Bookings</h1>
+        <h1>My Bookings</h1>
     </div>
 
     <!-- Filter Tabs -->
@@ -39,7 +39,11 @@
                 </div>
                 <div class="detail-row">
                     <span class="label">Location</span>
-                    <span>{{ booking.city }}, {{ booking.state }}</span>
+                    <span *ngIf="booking.serviceAddress?.city">{{ booking.serviceAddress?.city }}, {{
+                        booking.serviceAddress?.state }}</span>
+                    <span *ngIf="!booking.serviceAddress?.city && booking.city">{{ booking.city }}, {{ booking.state
+                        }}</span>
+                    <span *ngIf="!booking.serviceAddress?.city && !booking.city">-</span>
                 </div>
                 <div class="detail-row">
                     <span class="label">Priority</span>

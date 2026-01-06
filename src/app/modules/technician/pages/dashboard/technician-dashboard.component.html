@@ -1,78 +1,119 @@
 <div class="dashboard">
-    <div class="dashboard-header">
-        <div>
-            <h1>Welcome, {{ user?.firstName }}!</h1>
-            <p>Manage your assigned bookings</p>
+    <!-- Left Section: Main Content -->
+    <div class="main-content">
+        <!-- Greeting Bar -->
+        <div class="greeting-bar">
+            <div class="greeting-text">
+                <h1>Hey {{ user?.firstName }}!</h1>
+                <p>Here's what's happening with your jobs</p>
+            </div>
+            <div class="date-display">
+                {{ today | date:'EEEE, MMM d' }}
+            </div>
         </div>
-        <div class="availability-toggle" *ngIf="profile">
-            <label>Availability:</label>
+
+        <!-- Stats Cards Row -->
+        <div class="stats-cards">
+            <div class="stat-card assigned-card">
+                <div class="stat-icon">📋</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats.assignedBookings }}</span>
+                    <span class="stat-label">Assigned</span>
+                </div>
+            </div>
+            <div class="stat-card progress-card">
+                <div class="stat-icon">⚡</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ stats.inProgressBookings }}</span>
+                    <span class="stat-label">In Progress</span>
+                </div>
+            </div>
+            <div class="stat-card completed-card">
+                <div class="stat-icon">✓</div>
+                <div class="stat-info">
+                    <span class="stat-value">{{ profile?.totalJobsCompleted ?? profile?.completedJobs ?? 0 }}</span>
+                    <span class="stat-label">Completed</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Bookings Table -->
+        <div class="bookings-section">
+            <div class="section-title">
+                <h2>Your Bookings</h2>
+                <a routerLink="/technician/bookings">See all</a>
+            </div>
+
+            <div class="bookings-table" *ngIf="recentBookings.length > 0">
+                <div *ngFor="let booking of recentBookings" class="booking-row"
+                    [routerLink]="['/technician/bookings', booking.id]">
+                    <div class="booking-service">
+                        <strong>{{ booking.serviceName }}</strong>
+                        <span class="booking-date">{{ booking.scheduledDate | date:'MMM d, yyyy • h:mm a' }}</span>
+                    </div>
+                    <div class="booking-status" [ngClass]="'status-' + booking.status.toLowerCase()">
+                        {{ booking.status | titlecase }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-bookings" *ngIf="recentBookings.length === 0">
+                <p>No bookings assigned yet. Check back soon!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Section: Quick Actions Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h3>Quick Actions</h3>
+        </div>
+
+        <!-- Availability Toggle -->
+        <div class="availability-card" *ngIf="profile">
+            <div class="availability-header">
+                <span class="availability-label">Availability</span>
+                <span class="availability-status" [class.available]="profile.available">
+                    {{ profile.available ? 'Online' : 'Offline' }}
+                </span>
+            </div>
             <div class="toggle-switch" [class.active]="profile.available" (click)="toggleAvailability()">
                 <div class="toggle-slider"></div>
             </div>
-            <span class="toggle-label" [class.available]="profile.available">
-                {{ profile.available ? 'Available' : 'Unavailable' }}
-            </span>
         </div>
-    </div>
 
-    <!-- Quick Stats -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value">{{ stats.assignedBookings }}</div>
-            <div class="stat-label">Assigned Bookings</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value">{{ stats.inProgressBookings }}</div>
-            <div class="stat-label">In Progress</div>
-        </div>
-        <div class="stat-card" *ngIf="profile">
-            <div class="stat-value">{{ profile.totalJobsCompleted ?? profile.completedJobs ?? 0 }}</div>
-            <div class="stat-label">Completed Jobs</div>
-        </div>
-        <div class="stat-card" *ngIf="profile && profile.averageRating">
-            <div class="stat-value">⭐ {{ profile.averageRating | number:'1.1-1' }}</div>
-            <div class="stat-label">Average Rating</div>
-        </div>
-    </div>
-
-    <!-- Quick Actions -->
-    <div class="actions-section">
-        <h2>Quick Actions</h2>
-        <div class="actions-grid">
-            <a routerLink="/technician/bookings" class="action-card">
+        <div class="action-list">
+            <a routerLink="/technician/bookings" class="action-link highlight">
                 <span class="action-icon">📋</span>
-                <h3>My Bookings</h3>
-                <p>View assigned bookings</p>
+                <div class="action-text">
+                    <strong>My Bookings</strong>
+                    <small>View assigned jobs</small>
+                </div>
+                <span class="arrow">→</span>
             </a>
-            <a routerLink="/technician/profile" class="action-card">
+
+            <a routerLink="/technician/profile" class="action-link">
                 <span class="action-icon">👤</span>
-                <h3>My Profile</h3>
-                <p>Update your profile and skills</p>
+                <div class="action-text">
+                    <strong>My Profile</strong>
+                    <small>Update your details</small>
+                </div>
+                <span class="arrow">→</span>
             </a>
         </div>
-    </div>
 
-    <!-- Recent Bookings -->
-    <div class="bookings-section" *ngIf="recentBookings.length > 0">
-        <h2>Recent Assigned Bookings</h2>
-        <div class="bookings-list">
-            <div *ngFor="let booking of recentBookings" class="booking-card"
-                [routerLink]="['/technician/bookings', booking.id]">
-                <div class="booking-header">
-                    <div>
-                        <h3>{{ booking.serviceName }}</h3>
-                        <span class="booking-number">{{ booking.bookingNumber }}</span>
-                    </div>
-                    <span class="status-badge" [ngClass]="'status-' + booking.status.toLowerCase()">
-                        {{ booking.status }}
-                    </span>
-                </div>
-                <div class="booking-details">
-                    <p><strong>Customer:</strong> {{ booking.customerName }}</p>
-                    <p><strong>Scheduled:</strong> {{ booking.scheduledDate | date:'medium' }}</p>
-                    <p><strong>Location:</strong> {{ booking.city }}, {{ booking.state }}</p>
-                </div>
+        <!-- Rating Box -->
+        <div class="rating-box" *ngIf="profile?.averageRating">
+            <span class="rating-star">⭐</span>
+            <div class="rating-info">
+                <strong>{{ profile?.averageRating | number:'1.1-1' }}</strong>
+                <small>Average Rating</small>
             </div>
         </div>
-    </div>
+
+        <div class="help-box">
+            <span>💬</span>
+            <p>Need help? Contact our support team anytime.</p>
+        </div>
+    </aside>
 </div>
