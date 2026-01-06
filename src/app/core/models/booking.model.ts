@@ -1,6 +1,19 @@
 import { BookingStatus, BookingPriority } from './enums';
 
 /**
+ * Address Details (nested in booking response)
+ */
+export interface AddressDetails {
+    addressLine1: string;
+    addressLine2?: string;
+    city: string;
+    state: string;
+    zipCode: string;
+    latitude?: number;
+    longitude?: number;
+}
+
+/**
  * Booking
  */
 export interface Booking {
@@ -20,11 +33,14 @@ export interface Booking {
     imageUrls?: string[];
     scheduledDate: string;
     priority: BookingPriority;
-    addressLine1: string;
+    // Address - nested object from backend
+    serviceAddress?: AddressDetails;
+    // Flat address fields (for backward compatibility)
+    addressLine1?: string;
     addressLine2?: string;
-    city: string;
-    state: string;
-    zipCode: string;
+    city?: string;
+    state?: string;
+    zipCode?: string;
     latitude?: number;
     longitude?: number;
     specialInstructions?: string;
@@ -145,4 +161,26 @@ export interface TopService {
     serviceName: string;
     bookingCount: number;
     revenue: number;
+}
+
+/**
+ * Dashboard Overview (from /api/bookings/dashboard/overview)
+ */
+export interface DashboardOverview {
+    totalBookings: number;
+    pendingBookings: number;
+    assignedBookings: number;
+    inProgressBookings: number;
+    completedBookings: number;
+    cancelledBookings: number;
+    todayBookings: number;
+    todayCompleted: number;
+    weekBookings: number;
+    weekCompleted: number;
+    monthBookings: number;
+    monthCompleted: number;
+    avgRating: number;
+    avgResolutionTimeHours: number;
+    bookingsByStatus: Record<string, number>;
+    bookingsByCategory: Record<string, number>;
 }

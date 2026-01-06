@@ -42,8 +42,9 @@ export enum BookingStatus {
  */
 export enum BookingPriority {
     LOW = 'LOW',
-    MEDIUM = 'MEDIUM',
-    HIGH = 'HIGH'
+    NORMAL = 'NORMAL',
+    HIGH = 'HIGH',
+    URGENT = 'URGENT'
 }
 
 /**
