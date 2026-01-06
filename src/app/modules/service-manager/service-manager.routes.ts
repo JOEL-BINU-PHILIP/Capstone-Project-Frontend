@@ -19,7 +19,7 @@ export const MANAGER_ROUTES: Routes = [
     },
     {
         path: 'bookings/:id',
-        loadComponent: () => import('../customer/pages/booking-detail/booking-detail.component').then(m => m.BookingDetailComponent)
+        loadComponent: () => import('./pages/booking-detail/manager-booking-detail.component').then(m => m.ManagerBookingDetailComponent)
     },
     {
         path: 'bookings',

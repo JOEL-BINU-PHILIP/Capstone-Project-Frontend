@@ -1,0 +1,222 @@
+<div class="manager-booking-detail-page">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+        <p>Loading booking details...</p>
+    </div>
+
+    <!-- Booking Content -->
+    <div *ngIf="!loading && booking">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-left">
+                <button class="btn-back" (click)="goBack()">← Back to Bookings</button>
+                <h1>{{ booking.serviceName }}</h1>
+                <span class="booking-number">{{ booking.bookingNumber }}</span>
+            </div>
+            <div class="header-right">
+                <span class="status-badge" [ngClass]="getStatusClass(booking.status)">
+                    {{ booking.status }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Main Content Grid -->
+        <div class="content-grid">
+            <!-- Booking Details -->
+            <div class="detail-card">
+                <h2>Booking Details</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Service</label>
+                        <span>{{ booking.serviceName }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Service Price</label>
+                        <span>₹{{ booking.servicePrice }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Scheduled Date</label>
+                        <span>{{ booking.scheduledDate | date:'medium' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Priority</label>
+                        <span class="priority-badge" [ngClass]="getPriorityClass(booking.priority)">
+                            {{ booking.priority }}
+                        </span>
+                    </div>
+                    <div class="info-item">
+                        <label>Created</label>
+                        <span>{{ booking.createdAt | date:'medium' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Last Updated</label>
+                        <span>{{ booking.updatedAt | date:'medium' }}</span>
+                    </div>
+                </div>
+                <div class="info-item full-width">
+                    <label>Problem Description</label>
+                    <p>{{ booking.problemDescription }}</p>
+                </div>
+                <div class="info-item full-width" *ngIf="booking.specialInstructions">
+                    <label>Special Instructions</label>
+                    <p>{{ booking.specialInstructions }}</p>
+                </div>
+            </div>
+
+            <!-- Customer Info -->
+            <div class="detail-card">
+                <h2>Customer Information</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Name</label>
+                        <span>{{ booking.customerName }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Email</label>
+                        <span>{{ booking.customerEmail }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Phone</label>
+                        <span>{{ booking.customerPhone }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technician Info -->
+            <div class="detail-card">
+                <h2>Technician Assignment</h2>
+                <div *ngIf="booking.technicianId" class="technician-info">
+                    <div class="info-item">
+                        <label>Assigned Technician</label>
+                        <span class="technician-name">{{ booking.technicianName }}</span>
+                    </div>
+                </div>
+                <div *ngIf="!booking.technicianId" class="no-technician">
+                    <p>⚠️ No technician assigned yet</p>
+                </div>
+                <button *ngIf="canAssignTechnician()" class="btn-assign" (click)="openAssignDialog()">
+                    {{ booking.technicianId ? 'Reassign Technician' : 'Assign Technician' }}
+                </button>
+            </div>
+
+            <!-- Service Address -->
+            <div class="detail-card">
+                <h2>Service Address</h2>
+                <div class="address-content">
+                    <!-- Handle nested serviceAddress object -->
+                    <ng-container *ngIf="booking.serviceAddress?.addressLine1">
+                        <p>{{ booking.serviceAddress?.addressLine1 }}</p>
+                        <p *ngIf="booking.serviceAddress?.addressLine2">{{ booking.serviceAddress?.addressLine2 }}</p>
+                        <p *ngIf="booking.serviceAddress?.city">{{ booking.serviceAddress?.city }}<span
+                                *ngIf="booking.serviceAddress?.state">, {{ booking.serviceAddress?.state }}</span> - {{
+                            booking.serviceAddress?.zipCode }}</p>
+                    </ng-container>
+                    <!-- Fallback to flat address fields -->
+                    <ng-container *ngIf="!booking.serviceAddress?.addressLine1 && booking.addressLine1">
+                        <p>{{ booking.addressLine1 }}</p>
+                        <p *ngIf="booking.addressLine2">{{ booking.addressLine2 }}</p>
+                        <p *ngIf="booking.city">{{ booking.city }}<span *ngIf="booking.state">, {{ booking.state
+                                }}</span> - {{ booking.zipCode }}</p>
+                    </ng-container>
+                    <!-- No address available -->
+                    <p *ngIf="!booking.serviceAddress?.addressLine1 && !booking.addressLine1" class="no-address">
+                        Address not available
+                    </p>
+                </div>
+            </div>
+
+            <!-- Completion Details (if completed) -->
+            <div class="detail-card" *ngIf="booking.status === BookingStatus.COMPLETED">
+                <h2>Completion Details</h2>
+                <div class="info-grid" *ngIf="booking.completionNotes">
+                    <div class="info-item full-width">
+                        <label>Completion Notes</label>
+                        <p>{{ booking.completionNotes }}</p>
+                    </div>
+                </div>
+                <div class="info-grid" *ngIf="booking.rating">
+                    <div class="info-item">
+                        <label>Customer Rating</label>
+                        <span class="rating">⭐ {{ booking.rating }}/5</span>
+                    </div>
+                    <div class="info-item full-width" *ngIf="booking.feedback">
+                        <label>Customer Feedback</label>
+                        <p>{{ booking.feedback }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancellation Details (if cancelled) -->
+            <div class="detail-card" *ngIf="booking.status === BookingStatus.CANCELLED && booking.cancellationReason">
+                <h2>Cancellation Details</h2>
+                <div class="info-item full-width">
+                    <label>Reason</label>
+                    <p>{{ booking.cancellationReason }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions-section">
+            <button *ngIf="canAssignTechnician() && !booking.technicianId" class="btn-primary"
+                (click)="openAssignDialog()">
+                Assign Technician
+            </button>
+            <button *ngIf="canCancelBooking()" class="btn-danger" (click)="openCancelDialog()">
+                Cancel Booking
+            </button>
+        </div>
+    </div>
+
+    <!-- Assign Technician Modal -->
+    <div class="modal-overlay" *ngIf="showAssignDialog" (click)="closeAssignDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>{{ booking?.technicianId ? 'Reassign Technician' : 'Assign Technician' }}</h2>
+            <p class="modal-subtitle" *ngIf="booking">{{ booking.serviceName }} - {{ booking.bookingNumber }}</p>
+
+            <div class="form-group">
+                <label>Select Technician</label>
+                <select [(ngModel)]="selectedTechnicianId" class="form-control">
+                    <option value="">-- Select a technician --</option>
+                    <option *ngFor="let tech of availableTechnicians" [value]="tech.userId">
+                        {{ tech.firstName }} {{ tech.lastName }}
+                        <span *ngIf="tech.experience">({{ tech.experience }} yrs exp)</span>
+                        <span *ngIf="tech.averageRating"> - ⭐ {{ tech.averageRating | number:'1.1-1' }}</span>
+                    </option>
+                </select>
+            </div>
+
+            <div *ngIf="availableTechnicians.length === 0" class="empty-technicians">
+                <p>⚠️ No available technicians found</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" (click)="closeAssignDialog()">Cancel</button>
+                <button class="btn-primary" (click)="assignTechnician()" [disabled]="!selectedTechnicianId">
+                    {{ booking?.technicianId ? 'Reassign' : 'Assign' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Booking Modal -->
+    <div class="modal-overlay" *ngIf="showCancelDialog" (click)="closeCancelDialog()">
+        <div class="modal" (click)="$event.stopPropagation()">
+            <h2>Cancel Booking</h2>
+            <p class="modal-subtitle" *ngIf="booking">{{ booking.serviceName }} - {{ booking.bookingNumber }}</p>
+
+            <div class="form-group">
+                <label>Reason for Cancellation *</label>
+                <textarea [(ngModel)]="cancelReason" class="form-control" rows="4"
+                    placeholder="Enter the reason for cancellation..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" (click)="closeCancelDialog()">Close</button>
+                <button class="btn-danger" (click)="cancelBooking()" [disabled]="!cancelReason.trim()">
+                    Confirm Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

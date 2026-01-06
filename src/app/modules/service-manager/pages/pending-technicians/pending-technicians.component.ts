@@ -85,4 +85,18 @@ export class PendingTechniciansComponent implements OnInit {
       }
     });
   }
+
+  getTechnicianName(technician: TechnicianProfile): string {
+    if (technician.firstName || technician.lastName) {
+      return `${technician.firstName || ''} ${technician.lastName || ''}`.trim();
+    }
+    if (technician.username) {
+      return technician.username;
+    }
+    return technician.userId || 'Unknown';
+  }
+
+  getExperienceYears(technician: TechnicianProfile): number {
+    return technician.experienceYears ?? technician.experience ?? 0;
+  }
 }
