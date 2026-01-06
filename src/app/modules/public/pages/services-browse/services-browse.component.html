@@ -1,4 +1,101 @@
-<div class="services-container">
-    <h1>Browse Services</h1>
-    <p>Service catalog will be implemented here</p>
+<div class="services-page">
+    <!-- Header Section -->
+    <div class="page-header">
+        <h1>Browse Services</h1>
+        <p>Find the right professional for your home needs</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-section">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input type="text" [(ngModel)]="searchQuery" (input)="onSearch()" placeholder="Search for services..."
+                class="search-input" />
+            <button *ngIf="searchQuery" class="clear-btn" (click)="searchQuery = ''; onSearch()">✕</button>
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="categories-section" *ngIf="categories.length > 0">
+        <h2>Categories</h2>
+        <div class="categories-scroll">
+            <button class="category-chip" [class.active]="selectedCategoryId === ''" (click)="filterByCategory('')">
+                All Services
+            </button>
+            <button *ngFor="let category of categories" class="category-chip"
+                [class.active]="selectedCategoryId === category.id" (click)="filterByCategory(category.id)">
+                <span class="chip-icon">{{ getCategoryIcon(category) }}</span>
+                {{ category.name }}
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading services...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="error-state" *ngIf="error && !isLoading">
+        <span class="error-icon">⚠️</span>
+        <p>{{ error }}</p>
+        <button class="retry-btn" (click)="loadData()">Try Again</button>
+    </div>
+
+    <!-- Services Grid -->
+    <div class="services-section" *ngIf="!isLoading && !error">
+        <!-- Results Count -->
+        <div class="results-header">
+            <span class="results-count">{{ filteredServices.length }} services available</span>
+            <button *ngIf="selectedCategoryId || searchQuery" class="clear-filters" (click)="clearFilters()">
+                Clear filters
+            </button>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid" *ngIf="filteredServices.length > 0">
+            <div *ngFor="let service of filteredServices" class="service-card">
+                <div class="service-image">
+                    <img *ngIf="service.imageUrl" [src]="service.imageUrl" [alt]="service.name" />
+                    <div *ngIf="!service.imageUrl" class="placeholder-image">
+                        🛠️
+                    </div>
+                </div>
+                <div class="service-content">
+                    <span class="service-category">{{ service.categoryName }}</span>
+                    <h3 class="service-name">{{ service.name }}</h3>
+                    <p class="service-description">{{ service.description }}</p>
+                    <div class="service-footer">
+                        <div class="service-price">
+                            <span class="price-label">Starting at</span>
+                            <span class="price-value">₹{{ service.basePrice }}</span>
+                        </div>
+                        <a routerLink="/auth/login" class="book-btn">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" *ngIf="filteredServices.length === 0">
+            <span class="empty-icon">🔍</span>
+            <h3>No services found</h3>
+            <p *ngIf="searchQuery">No services match "{{ searchQuery }}"</p>
+            <p *ngIf="!searchQuery">No services available in this category</p>
+            <button class="clear-filters" (click)="clearFilters()">View all services</button>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to get started?</h2>
+            <p>Create an account to book services and track your appointments</p>
+            <div class="cta-buttons">
+                <a routerLink="/auth/register/customer" class="cta-primary">Register Now</a>
+                <a routerLink="/auth/login" class="cta-secondary">Sign In</a>
+            </div>
+        </div>
+    </div>
 </div>

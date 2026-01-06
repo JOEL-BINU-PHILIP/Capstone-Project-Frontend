@@ -1,5 +1,280 @@
-.about-container {
-    padding: 40px 20px;
-    max-width: 1200px;
+.about-page {
+    width: 100%;
+    max-width: 1000px;
     margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* Hero Section */
+.hero-section {
+    text-align: center;
+    padding: 40px 0 48px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 48px;
+}
+
+.hero-section h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #212121;
+    margin-bottom: 12px;
+}
+
+.hero-section p {
+    font-size: 18px;
+    color: #757575;
+}
+
+/* Content Section */
+.content-section {
+    margin-bottom: 60px;
+}
+
+.section-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.text-content h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 20px;
+}
+
+.text-content p {
+    font-size: 16px;
+    color: #616161;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.stats-box {
+    background: #000;
+    border-radius: 16px;
+    padding: 40px;
+    display: grid;
+    gap: 32px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 36px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 4px;
+}
+
+.stat-text {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Values Section */
+.values-section {
+    margin-bottom: 60px;
+}
+
+.values-section h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #212121;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.value-card {
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 28px;
+}
+
+.value-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #000;
+    color: white;
+    border-radius: 12px;
+    font-size: 20px;
+    margin-bottom: 16px;
+}
+
+.value-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 8px;
+}
+
+.value-card p {
+    font-size: 14px;
+    color: #757575;
+    line-height: 1.6;
+}
+
+/* How It Works */
+.how-it-works {
+    margin-bottom: 60px;
+    padding: 48px 40px;
+    background: #fafafa;
+    border-radius: 16px;
+}
+
+.how-it-works h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #212121;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.steps {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 16px;
+}
+
+.step {
+    text-align: center;
+    flex: 1;
+    max-width: 220px;
+}
+
+.step-number {
+    width: 48px;
+    height: 48px;
+    background: #000;
+    color: white;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.step h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 8px;
+}
+
+.step p {
+    font-size: 14px;
+    color: #757575;
+}
+
+.step-connector {
+    width: 60px;
+    height: 2px;
+    background: #e0e0e0;
+    margin-top: 24px;
+}
+
+/* CTA Section */
+.cta-section {
+    text-align: center;
+    padding: 48px 32px;
+    background: #000;
+    border-radius: 16px;
+    margin-bottom: 40px;
+}
+
+.cta-section h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.cta-section p {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 24px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+}
+
+.cta-primary {
+    background: white;
+    color: #000;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.cta-primary:hover {
+    background: #f5f5f5;
+}
+
+.cta-secondary {
+    background: transparent;
+    color: white;
+    padding: 12px 28px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.2s;
+}
+
+.cta-secondary:hover {
+    border-color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 28px;
+    }
+
+    .section-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .steps {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .step-connector {
+        width: 2px;
+        height: 40px;
+        margin: 0;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
 }
