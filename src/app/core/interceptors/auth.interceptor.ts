@@ -11,19 +11,24 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const authService = inject(AuthService);
     const router = inject(Router);
 
-    // Skip auth for public endpoints
+    // Skip auth for public endpoints (only for GET requests)
     const publicEndpoints = [
         '/api/auth/login',
         '/api/auth/register',
         '/api/auth/verify-email',
-        '/api/auth/resend-verification',
+        '/api/auth/resend-verification'
+    ];
+
+    // Public GET endpoints (read-only access without auth)
+    const publicGetEndpoints = [
         '/api/services/categories',
         '/api/services'
     ];
 
     const isPublicEndpoint = publicEndpoints.some(endpoint => req.url.includes(endpoint));
+    const isPublicGetEndpoint = req.method === 'GET' && publicGetEndpoints.some(endpoint => req.url.includes(endpoint));
 
-    if (isPublicEndpoint) {
+    if (isPublicEndpoint || isPublicGetEndpoint) {
         return next(req);
     }
 

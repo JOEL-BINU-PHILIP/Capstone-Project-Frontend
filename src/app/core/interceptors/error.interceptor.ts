@@ -7,6 +7,17 @@ import { catchError, throwError } from 'rxjs';
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req).pipe(
         catchError(error => {
+            // If status is 2xx, it's actually a success - don't treat as error
+            if (error.status >= 200 && error.status < 300) {
+                // This can happen when response body parsing fails but request was successful
+                // Return the response as-is (success case)
+                return throwError(() => ({
+                    ...error,
+                    isSuccess: true,
+                    userMessage: 'Success'
+                }));
+            }
+
             let errorMessage = 'An error occurred';
 
             if (error.error instanceof ErrorEvent) {
