@@ -1,59 +1,192 @@
-# ServiceManagementSystem
+# Service Management System – Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+A **modern Angular-based frontend application** for the **Service Management System**, providing role-based dashboards and workflows for **Customers, Technicians, Service Managers, and Admins**.
 
-## Development server
+This frontend communicates **only via the API Gateway** and supports secure JWT authentication, role guards, interceptors, and modular lazy-loaded routes.
 
-To start a local development server, run:
+---
+
+## Tech Stack
+
+* **Framework:** Angular (Standalone Components)
+* **Language:** TypeScript
+* **Styling:** CSS 
+* **Routing:** Angular Router (Lazy Loaded)
+* **State Handling:** RxJS (BehaviorSubject)
+* **Security:** JWT (via HTTP Interceptor)
+* **Build Tool:** Angular CLI
+* **Backend Integration:** Spring Boot Microservices (via API Gateway)
+
+---
+
+## Application Architecture
+
+```text
+src/
+├── app/
+│   ├── core/           # Guards, interceptors, models, services
+│   ├── modules/        # Feature modules (Admin, Customer, Technician, etc.)
+│   ├── shared/         # Reusable UI components
+│   ├── app.routes.ts   # Central routing
+│   └── app.ts          # Root standalone component
+├── environments/       # Environment configs
+└── main.ts             # Application bootstrap
+```
+
+Fully **modular, role-based, and scalable architecture** 
+
+---
+
+## 👥 Supported User Roles
+
+| Role            | Capabilities                                       |
+| --------------- | -------------------------------------------------- |
+| Customer        | Browse services, create bookings, view invoices    |
+| Technician      | Manage assigned jobs, update status, complete work |
+| Service Manager | Approve technicians, assign bookings, dashboards   |
+| Admin           | User management, audit logs, system reports        |
+
+---
+
+## Authentication & Security
+
+### Implemented Security Features
+
+* JWT-based authentication
+* Role-based route protection
+* Email verification guard
+* Token auto-refresh
+* Global error handling
+
+### Route Guards
+
+* `auth.guard` → Authenticated users only
+* `role.guard` → Role-based access
+* `email-verified.guard` → Verified users only
+
+---
+
+## HTTP Interceptors
+
+| Interceptor         | Purpose                        |
+| ------------------- | ------------------------------ |
+| Auth Interceptor    | Attaches JWT, refreshes token  |
+| Error Interceptor   | Centralized API error handling |
+| Loading Interceptor | Global loading indicator       |
+
+---
+
+## Routing Strategy
+
+* **Lazy-loaded modules** for performance
+* **Standalone components**
+* Centralized role-based routing
+
+Example:
+
+```ts
+/admin → Admin Module
+/customer → Customer Module
+/technician → Technician Module
+/manager → Service Manager Module
+```
+
+---
+
+##  Backend Integration
+
+All API calls are routed through:
+
+```
+API Gateway → http://localhost:8080
+```
+
+Configured in:
+
+```ts
+environment.ts
+```
+
+```ts
+apiUrl: 'http://localhost:8080'
+```
+
+---
+
+## 🧪 Development Setup
+
+### 1️ Prerequisites
+
+* Node.js (LTS)
+* Angular CLI
+* Backend services running (Docker recommended)
+
+---
+
+### 2️ Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+### 3️ Start Development Server
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Access at:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+http://localhost:4200
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
+
+## Build for Production
 
 ```bash
-ng generate --help
+ng build --configuration=production
 ```
 
-## Building
+Output:
 
-To build the project run:
-
-```bash
-ng build
+```text
+dist/
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
 
-## Running unit tests
+## UI & UX Highlights
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+* Urban Company–style clean UI
+* Responsive layouts
+* Role-specific dashboards
+* Central notification system
+* Global loader for API calls
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+## Key Features
 
-For end-to-end (e2e) testing, run:
+* Secure JWT authentication
+* Role-based dashboards
+* Booking lifecycle management
+* Invoice & payment handling
+* Technician approval workflow
+* Admin audit logs & reports
+* API Gateway–only communication
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Important Notes
 
-## Additional Resources
+* Frontend **does not communicate directly with microservices**
+* All requests go through **API Gateway**
+* Requires backend services running for full functionality
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+
